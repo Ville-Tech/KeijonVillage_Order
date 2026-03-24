@@ -10,9 +10,9 @@ namespace VillageNewbies_Projekti.Services
     public class Mokki
     {
         // Kysymysmerkit meinaa, että value voi olla null.
-        private int id;
-        private int alue_id;
-        private string postinro;
+        private int mokki_id; // PK
+        private int alue_id; // FK
+        private string postinro; // FK
         private string? mokkinimi;
         private string? katuosoite;
         private double hinta;
@@ -20,10 +20,10 @@ namespace VillageNewbies_Projekti.Services
         private int henkilomaara;
         private string? varustelu;
 
-        public int ID
+        public int Mokki_ID
         {
-            get { return id; }
-            set { id = value; }
+            get { return mokki_id; }
+            set { mokki_id = value; }
         }
         public int Alue_ID
         {

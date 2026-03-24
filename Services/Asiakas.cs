@@ -4,18 +4,18 @@
     public class Asiakas
     {
         // Kysymysmerkit meinaa, että value voi olla null.
-        private int id;
+        private int asiakas_id; // PK
+        private string postinro; // FK
         private string? etunimi;
         private string? sukunimi;
         private string? lahiosoite;
-        private string postinro;
         private string? sahkoposti;
         private string? puhelin;
 
-        public int ID
+        public int Asiakas_ID
         {
-            get { return id; }
-            set { id = value; }
+            get { return asiakas_id; }
+            set { asiakas_id = value; }
         }
         public string? Etunimi
         {
