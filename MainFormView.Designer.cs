@@ -46,7 +46,7 @@
             // 
             // panelTop
             // 
-            panelTop.BackColor = SystemColors.Control;
+            panelTop.BackColor = SystemColors.ButtonFace;
             panelTop.Controls.Add(label1);
             panelTop.Dock = DockStyle.Top;
             panelTop.Location = new Point(0, 0);
@@ -58,16 +58,17 @@
             // 
             label1.AutoSize = true;
             label1.BackColor = SystemColors.Control;
-            label1.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label1.Font = new Font("Segoe UI", 21.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label1.Location = new Point(10, 15);
             label1.Name = "label1";
-            label1.Size = new Size(440, 37);
+            label1.Size = new Size(470, 40);
             label1.TabIndex = 0;
             label1.Text = "Village Newbies - Varausjärjestelmä";
             // 
             // panelLeft
             // 
             panelLeft.AccessibleRole = AccessibleRole.None;
+            panelLeft.BorderStyle = BorderStyle.Fixed3D;
             panelLeft.Controls.Add(btnRaportit);
             panelLeft.Controls.Add(btnLaskut);
             panelLeft.Controls.Add(btnVaraukset);
@@ -85,10 +86,11 @@
             // btnRaportit
             // 
             btnRaportit.Dock = DockStyle.Top;
-            btnRaportit.FlatStyle = FlatStyle.Flat;
+            btnRaportit.FlatStyle = FlatStyle.Popup;
+            btnRaportit.Font = new Font("Segoe UI", 12F);
             btnRaportit.Location = new Point(0, 595);
             btnRaportit.Name = "btnRaportit";
-            btnRaportit.Size = new Size(220, 85);
+            btnRaportit.Size = new Size(216, 85);
             btnRaportit.TabIndex = 7;
             btnRaportit.Text = "Raportit";
             btnRaportit.UseVisualStyleBackColor = true;
@@ -97,10 +99,11 @@
             // btnLaskut
             // 
             btnLaskut.Dock = DockStyle.Top;
-            btnLaskut.FlatStyle = FlatStyle.Flat;
+            btnLaskut.FlatStyle = FlatStyle.Popup;
+            btnLaskut.Font = new Font("Segoe UI", 12F);
             btnLaskut.Location = new Point(0, 510);
             btnLaskut.Name = "btnLaskut";
-            btnLaskut.Size = new Size(220, 85);
+            btnLaskut.Size = new Size(216, 85);
             btnLaskut.TabIndex = 6;
             btnLaskut.Text = "Laskut";
             btnLaskut.UseVisualStyleBackColor = true;
@@ -109,10 +112,11 @@
             // btnVaraukset
             // 
             btnVaraukset.Dock = DockStyle.Top;
-            btnVaraukset.FlatStyle = FlatStyle.Flat;
+            btnVaraukset.FlatStyle = FlatStyle.Popup;
+            btnVaraukset.Font = new Font("Segoe UI", 12F);
             btnVaraukset.Location = new Point(0, 425);
             btnVaraukset.Name = "btnVaraukset";
-            btnVaraukset.Size = new Size(220, 85);
+            btnVaraukset.Size = new Size(216, 85);
             btnVaraukset.TabIndex = 5;
             btnVaraukset.Text = "Varaukset";
             btnVaraukset.UseVisualStyleBackColor = true;
@@ -121,10 +125,11 @@
             // btnAsiakkaat
             // 
             btnAsiakkaat.Dock = DockStyle.Top;
-            btnAsiakkaat.FlatStyle = FlatStyle.Flat;
+            btnAsiakkaat.FlatStyle = FlatStyle.Popup;
+            btnAsiakkaat.Font = new Font("Segoe UI", 12F);
             btnAsiakkaat.Location = new Point(0, 340);
             btnAsiakkaat.Name = "btnAsiakkaat";
-            btnAsiakkaat.Size = new Size(220, 85);
+            btnAsiakkaat.Size = new Size(216, 85);
             btnAsiakkaat.TabIndex = 4;
             btnAsiakkaat.Text = "Asiakkaat";
             btnAsiakkaat.UseVisualStyleBackColor = true;
@@ -133,10 +138,11 @@
             // btnPalvelut
             // 
             btnPalvelut.Dock = DockStyle.Top;
-            btnPalvelut.FlatStyle = FlatStyle.Flat;
+            btnPalvelut.FlatStyle = FlatStyle.Popup;
+            btnPalvelut.Font = new Font("Segoe UI", 12F);
             btnPalvelut.Location = new Point(0, 255);
             btnPalvelut.Name = "btnPalvelut";
-            btnPalvelut.Size = new Size(220, 85);
+            btnPalvelut.Size = new Size(216, 85);
             btnPalvelut.TabIndex = 3;
             btnPalvelut.Text = "Palvelut";
             btnPalvelut.UseVisualStyleBackColor = true;
@@ -145,10 +151,11 @@
             // btnMokit
             // 
             btnMokit.Dock = DockStyle.Top;
-            btnMokit.FlatStyle = FlatStyle.Flat;
+            btnMokit.FlatStyle = FlatStyle.Popup;
+            btnMokit.Font = new Font("Segoe UI", 12F);
             btnMokit.Location = new Point(0, 170);
             btnMokit.Name = "btnMokit";
-            btnMokit.Size = new Size(220, 85);
+            btnMokit.Size = new Size(216, 85);
             btnMokit.TabIndex = 2;
             btnMokit.Text = "Mökit";
             btnMokit.UseVisualStyleBackColor = true;
@@ -157,10 +164,11 @@
             // btnAlueet
             // 
             btnAlueet.Dock = DockStyle.Top;
-            btnAlueet.FlatStyle = FlatStyle.Flat;
+            btnAlueet.FlatStyle = FlatStyle.Popup;
+            btnAlueet.Font = new Font("Segoe UI", 12F);
             btnAlueet.Location = new Point(0, 85);
             btnAlueet.Name = "btnAlueet";
-            btnAlueet.Size = new Size(220, 85);
+            btnAlueet.Size = new Size(216, 85);
             btnAlueet.TabIndex = 1;
             btnAlueet.Text = "Alueet";
             btnAlueet.UseVisualStyleBackColor = true;
@@ -169,10 +177,11 @@
             // btnEtusivu
             // 
             btnEtusivu.Dock = DockStyle.Top;
-            btnEtusivu.FlatStyle = FlatStyle.Flat;
+            btnEtusivu.FlatStyle = FlatStyle.Popup;
+            btnEtusivu.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnEtusivu.Location = new Point(0, 0);
             btnEtusivu.Name = "btnEtusivu";
-            btnEtusivu.Size = new Size(220, 85);
+            btnEtusivu.Size = new Size(216, 85);
             btnEtusivu.TabIndex = 0;
             btnEtusivu.Text = "Etusivu";
             btnEtusivu.UseVisualStyleBackColor = true;
@@ -180,6 +189,7 @@
             // 
             // panelFill
             // 
+            panelFill.BorderStyle = BorderStyle.Fixed3D;
             panelFill.Dock = DockStyle.Fill;
             panelFill.Location = new Point(220, 70);
             panelFill.Name = "panelFill";
@@ -190,6 +200,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.ButtonFace;
             ClientSize = new Size(1284, 750);
             Controls.Add(panelFill);
             Controls.Add(panelLeft);
