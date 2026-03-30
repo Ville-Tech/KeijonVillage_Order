@@ -24,7 +24,7 @@ namespace VillageNewbies_Projekti
         }
 
         // Apumetodi joka vaihtaa näkymän
-        private void ShowView(UserControl view)
+        public void ShowView(UserControl view)
         {
             // Tyhjennetään panelFill kaikista sen sisällä olevista kontrolleista - Clear();
             panelFill.Controls.Clear();

@@ -1,4 +1,4 @@
-﻿namespace VillageNewbies_Projekti.Services
+﻿namespace VillageNewbies_Projekti.Models
 {
     // Asiakas luokka
     public class Asiakas

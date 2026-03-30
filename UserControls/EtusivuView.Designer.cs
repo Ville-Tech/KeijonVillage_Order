@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             panel = new Panel();
-            btnUusiLasku = new Button();
+            btnLuoLasku = new Button();
             btnUusiAsiakas = new Button();
             btnUusiVaraus = new Button();
             panelLaskut = new Panel();
@@ -51,7 +51,7 @@
             // 
             // panel
             // 
-            panel.Controls.Add(btnUusiLasku);
+            panel.Controls.Add(btnLuoLasku);
             panel.Controls.Add(btnUusiAsiakas);
             panel.Controls.Add(btnUusiVaraus);
             panel.Controls.Add(panelLaskut);
@@ -62,19 +62,20 @@
             panel.Size = new Size(1064, 453);
             panel.TabIndex = 0;
             // 
-            // btnUusiLasku
+            // btnLuoLasku
             // 
-            btnUusiLasku.BackColor = Color.White;
-            btnUusiLasku.FlatAppearance.BorderSize = 0;
-            btnUusiLasku.FlatStyle = FlatStyle.Popup;
-            btnUusiLasku.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnUusiLasku.ForeColor = Color.Black;
-            btnUusiLasku.Location = new Point(460, 300);
-            btnUusiLasku.Name = "btnUusiLasku";
-            btnUusiLasku.Size = new Size(180, 45);
-            btnUusiLasku.TabIndex = 2;
-            btnUusiLasku.Text = "Luo lasku";
-            btnUusiLasku.UseVisualStyleBackColor = false;
+            btnLuoLasku.BackColor = Color.White;
+            btnLuoLasku.FlatAppearance.BorderSize = 0;
+            btnLuoLasku.FlatStyle = FlatStyle.Popup;
+            btnLuoLasku.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnLuoLasku.ForeColor = Color.Black;
+            btnLuoLasku.Location = new Point(460, 300);
+            btnLuoLasku.Name = "btnLuoLasku";
+            btnLuoLasku.Size = new Size(180, 45);
+            btnLuoLasku.TabIndex = 2;
+            btnLuoLasku.Text = "Luo lasku";
+            btnLuoLasku.UseVisualStyleBackColor = false;
+            btnLuoLasku.Click += btnLuoLasku_Click_1;
             // 
             // btnUusiAsiakas
             // 
@@ -89,6 +90,7 @@
             btnUusiAsiakas.TabIndex = 3;
             btnUusiAsiakas.Text = "Uusi asiakas";
             btnUusiAsiakas.UseVisualStyleBackColor = false;
+            btnUusiAsiakas.Click += btnUusiAsiakas_Click_1;
             // 
             // btnUusiVaraus
             // 
@@ -102,6 +104,7 @@
             btnUusiVaraus.TabIndex = 3;
             btnUusiVaraus.Text = "Uusi varaus";
             btnUusiVaraus.UseVisualStyleBackColor = false;
+            btnUusiVaraus.Click += btnUusiVaraus_Click_1;
             // 
             // panelLaskut
             // 
@@ -121,9 +124,9 @@
             lblLaskut.Font = new Font("Segoe UI", 21.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblLaskut.Location = new Point(35, 55);
             lblLaskut.Name = "lblLaskut";
-            lblLaskut.Size = new Size(79, 40);
+            lblLaskut.Size = new Size(29, 40);
             lblLaskut.TabIndex = 3;
-            lblLaskut.Text = "4 kpl";
+            lblLaskut.Text = "-";
             // 
             // label3
             // 
@@ -153,9 +156,9 @@
             lblLoppuu.Font = new Font("Segoe UI", 21.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblLoppuu.Location = new Point(35, 55);
             lblLoppuu.Name = "lblLoppuu";
-            lblLoppuu.Size = new Size(79, 40);
+            lblLoppuu.Size = new Size(29, 40);
             lblLoppuu.TabIndex = 2;
-            lblLoppuu.Text = "4 kpl";
+            lblLoppuu.Text = "-";
             // 
             // label2
             // 
@@ -193,9 +196,9 @@
             lblAlkaa.Font = new Font("Segoe UI", 21.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblAlkaa.Location = new Point(35, 55);
             lblAlkaa.Name = "lblAlkaa";
-            lblAlkaa.Size = new Size(79, 40);
+            lblAlkaa.Size = new Size(29, 40);
             lblAlkaa.TabIndex = 1;
-            lblAlkaa.Text = "4 kpl";
+            lblAlkaa.Text = "-";
             // 
             // label1
             // 
@@ -252,7 +255,7 @@
         private Label label1;
         private Button btnUusiAsiakas;
         private Button btnUusiVaraus;
-        private Button btnUusiLasku;
+        private Button btnLuoLasku;
         private Panel panel1;
     }
 }

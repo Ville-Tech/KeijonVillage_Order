@@ -1,4 +1,4 @@
-﻿namespace VillageNewbies_Projekti.Services
+﻿namespace VillageNewbies_Projekti.Models
 {
     // Kysymysmerkit meinaa, että value voi olla null.
     public class Varaus

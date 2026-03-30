@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VillageNewbies_Projekti.Services
+namespace VillageNewbies_Projekti.Models
 {
     // Kysymysmerkit meinaa, että value voi olla null.
     public class Alue

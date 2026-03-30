@@ -15,7 +15,7 @@ namespace VillageNewbies_Projekti.Database
          * MUISTA MYÖS JOS PUSHAAT GITHUBIIN NIIN NÄMÄ ASETTAA NÄMÄ.
          * DATABASEN NIMEÄ EI TARVITSE MUUTTAA.
         */
-        private string connectionString = "Server=localhost;Port=3306;Database=vn;User=root;Password=omasalasanasi";
+        private string connectionString = "Server=localhost;Port=3306;Database=vn;User=root;Password=omasalanasi";
 
         public MySqlConnection GetConnection()
         {
