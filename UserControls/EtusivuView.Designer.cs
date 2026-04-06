@@ -75,7 +75,7 @@
             btnLuoLasku.TabIndex = 2;
             btnLuoLasku.Text = "Luo lasku";
             btnLuoLasku.UseVisualStyleBackColor = false;
-            btnLuoLasku.Click += btnLuoLasku_Click_1;
+            btnLuoLasku.Click += btnLuoLasku_Click;
             // 
             // btnUusiAsiakas
             // 
@@ -90,7 +90,7 @@
             btnUusiAsiakas.TabIndex = 3;
             btnUusiAsiakas.Text = "Uusi asiakas";
             btnUusiAsiakas.UseVisualStyleBackColor = false;
-            btnUusiAsiakas.Click += btnUusiAsiakas_Click_1;
+            btnUusiAsiakas.Click += btnUusiAsiakas_Click;
             // 
             // btnUusiVaraus
             // 
@@ -104,7 +104,7 @@
             btnUusiVaraus.TabIndex = 3;
             btnUusiVaraus.Text = "Uusi varaus";
             btnUusiVaraus.UseVisualStyleBackColor = false;
-            btnUusiVaraus.Click += btnUusiVaraus_Click_1;
+            btnUusiVaraus.Click += btnUusiVaraus_Click;
             // 
             // panelLaskut
             // 

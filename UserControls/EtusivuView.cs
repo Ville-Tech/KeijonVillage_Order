@@ -64,20 +64,5 @@ namespace VillageNewbies_Projekti.Views
             var main = this.FindForm() as MainFormView;
             main?.ShowView(new LaskutView());
         }
-
-        private void btnUusiVaraus_Click_1(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btnUusiAsiakas_Click_1(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btnLuoLasku_Click_1(object sender, EventArgs e)
-        {
-
-        }
     }
 }
