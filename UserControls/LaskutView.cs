@@ -24,8 +24,6 @@ namespace VillageNewbies_Projekti.Views
         // -------------------------------
         private void SetupUI()
         {
-            // Main title (already in Designer)
-            label1.Text = "Laskut";
 
             // Create menu labels
             CreateMenuLabel("➕ Luo uusi lasku", new Point(50, 120), out lblNewInvoice);

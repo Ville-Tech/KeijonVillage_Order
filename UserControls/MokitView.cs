@@ -242,7 +242,9 @@ namespace VillageNewbies_Projekti.Views
             var g = e.Graphics;
             g.SmoothingMode = SmoothingMode.AntiAlias;
             g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-            g.TranslateTransform(0, -_cardPanel.AutoScrollPosition.Y * -1 + _cardPanel.AutoScrollPosition.Y);
+
+            // Korjattu — alkuperäinen laskukaava oli väärä
+            g.TranslateTransform(0, _cardPanel.AutoScrollPosition.Y);
 
             for (int i = 0; i < _layout.Count; i++)
             {
@@ -342,7 +344,8 @@ namespace VillageNewbies_Projekti.Views
         // ── Hover ────────────────────────────────────────────────────────────────
         private void CardPanel_MouseMove(object? sender, MouseEventArgs e)
         {
-            var pt = new Point(e.X, e.Y - _cardPanel.AutoScrollPosition.Y);
+            // Korjattu scroll-offset
+            var pt = new Point(e.X, e.Y + (-_cardPanel.AutoScrollPosition.Y));
             int prev = _hoverIndex;
             _hoverIndex = -1;
             for (int i = 0; i < _layout.Count; i++)

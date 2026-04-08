@@ -28,32 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
-            label1 = new Label();
             SuspendLayout();
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 21.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label1.Location = new Point(395, 320);
-            label1.Name = "label1";
-            label1.Size = new Size(257, 40);
-            label1.TabIndex = 1;
-            label1.Text = "Tervetuloa palvelut";
             // 
             // PalvelutView
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(label1);
             Name = "PalvelutView";
             Size = new Size(1064, 681);
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
-
-        private Label label1;
     }
 }

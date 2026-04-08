@@ -32,22 +32,21 @@
             lblTitle = new Label();
             keskiPanel = new Panel();
             panelVasen = new Panel();
+            dgvAlueet = new DataGridView();
+            txtHaku = new TextBox();
             label1 = new Label();
-            listBoxVasen = new ListBox();
             panelOikea = new Panel();
-            lblTyhjatKpl = new Label();
-            lblAlueitaKpl = new Label();
-            lblAktiivisetKpl = new Label();
-            label4 = new Label();
-            alaPanel = new Panel();
+            btnTyhjenna = new Button();
+            btnPoista = new Button();
+            btnMuokkaa = new Button();
+            btnLisaa = new Button();
+            txtNimi = new TextBox();
             lblNimi = new Label();
-            label2 = new Label();
-            lblValittu = new Label();
             ylaPanel.SuspendLayout();
             keskiPanel.SuspendLayout();
             panelVasen.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvAlueet).BeginInit();
             panelOikea.SuspendLayout();
-            alaPanel.SuspendLayout();
             SuspendLayout();
             // 
             // ylaPanel
@@ -55,17 +54,18 @@
             ylaPanel.Controls.Add(lblTitle);
             ylaPanel.Dock = DockStyle.Top;
             ylaPanel.Location = new Point(0, 0);
+            ylaPanel.Margin = new Padding(3, 2, 3, 2);
             ylaPanel.Name = "ylaPanel";
-            ylaPanel.Size = new Size(1216, 150);
+            ylaPanel.Size = new Size(1064, 112);
             ylaPanel.TabIndex = 0;
             // 
             // lblTitle
             // 
             lblTitle.AutoSize = true;
             lblTitle.Font = new Font("Segoe UI", 20.25F);
-            lblTitle.Location = new Point(69, 53);
+            lblTitle.Location = new Point(60, 40);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(117, 46);
+            lblTitle.Size = new Size(93, 37);
             lblTitle.TabIndex = 0;
             lblTitle.Text = "Alueet";
             // 
@@ -73,156 +73,151 @@
             // 
             keskiPanel.Controls.Add(panelVasen);
             keskiPanel.Controls.Add(panelOikea);
-            keskiPanel.Location = new Point(0, 149);
+            keskiPanel.Dock = DockStyle.Fill;
+            keskiPanel.Location = new Point(0, 112);
+            keskiPanel.Margin = new Padding(3, 2, 3, 2);
             keskiPanel.Name = "keskiPanel";
-            keskiPanel.Padding = new Padding(20);
-            keskiPanel.Size = new Size(1216, 552);
+            keskiPanel.Padding = new Padding(18, 15, 18, 15);
+            keskiPanel.Size = new Size(1064, 569);
             keskiPanel.TabIndex = 2;
             // 
             // panelVasen
             // 
+            panelVasen.Controls.Add(dgvAlueet);
+            panelVasen.Controls.Add(txtHaku);
             panelVasen.Controls.Add(label1);
-            panelVasen.Controls.Add(listBoxVasen);
             panelVasen.Dock = DockStyle.Left;
-            panelVasen.Location = new Point(20, 20);
+            panelVasen.Location = new Point(18, 15);
+            panelVasen.Margin = new Padding(3, 2, 3, 2);
             panelVasen.Name = "panelVasen";
-            panelVasen.Size = new Size(400, 512);
+            panelVasen.Size = new Size(350, 539);
             panelVasen.TabIndex = 3;
+            // 
+            // dgvAlueet
+            // 
+            dgvAlueet.BackgroundColor = Color.White;
+            dgvAlueet.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvAlueet.Location = new Point(43, 105);
+            dgvAlueet.Name = "dgvAlueet";
+            dgvAlueet.Size = new Size(260, 300);
+            dgvAlueet.TabIndex = 4;
+            // 
+            // txtHaku
+            // 
+            txtHaku.BackColor = Color.White;
+            txtHaku.Location = new Point(43, 64);
+            txtHaku.Name = "txtHaku";
+            txtHaku.Size = new Size(261, 23);
+            txtHaku.TabIndex = 2;
+            txtHaku.TextChanged += txtHaku_TextChanged;
             // 
             // label1
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 16.2F);
-            label1.Location = new Point(49, 17);
+            label1.Location = new Point(43, 13);
             label1.Name = "label1";
-            label1.Size = new Size(122, 38);
+            label1.Size = new Size(126, 30);
             label1.TabIndex = 1;
-            label1.Text = "Aluelista";
-            // 
-            // listBoxVasen
-            // 
-            listBoxVasen.Font = new Font("Segoe UI", 16.2F);
-            listBoxVasen.FormattingEnabled = true;
-            listBoxVasen.ItemHeight = 37;
-            listBoxVasen.Location = new Point(49, 85);
-            listBoxVasen.Name = "listBoxVasen";
-            listBoxVasen.Size = new Size(327, 374);
-            listBoxVasen.TabIndex = 0;
-            listBoxVasen.SelectedIndexChanged += listBoxVasen_SelectedIndexChanged;
+            label1.Text = "Hae alueita:";
             // 
             // panelOikea
             // 
-            panelOikea.Controls.Add(lblTyhjatKpl);
-            panelOikea.Controls.Add(lblAlueitaKpl);
-            panelOikea.Controls.Add(lblAktiivisetKpl);
-            panelOikea.Controls.Add(label4);
+            panelOikea.Controls.Add(btnTyhjenna);
+            panelOikea.Controls.Add(btnPoista);
+            panelOikea.Controls.Add(btnMuokkaa);
+            panelOikea.Controls.Add(btnLisaa);
+            panelOikea.Controls.Add(txtNimi);
+            panelOikea.Controls.Add(lblNimi);
             panelOikea.Dock = DockStyle.Right;
-            panelOikea.Location = new Point(796, 20);
-            panelOikea.Margin = new Padding(20, 0, 0, 0);
+            panelOikea.Location = new Point(389, 15);
+            panelOikea.Margin = new Padding(18, 0, 0, 0);
             panelOikea.Name = "panelOikea";
-            panelOikea.Size = new Size(400, 512);
+            panelOikea.Size = new Size(657, 539);
             panelOikea.TabIndex = 2;
             // 
-            // lblTyhjatKpl
+            // btnTyhjenna
             // 
-            lblTyhjatKpl.AutoSize = true;
-            lblTyhjatKpl.Font = new Font("Segoe UI", 16.2F);
-            lblTyhjatKpl.Location = new Point(49, 195);
-            lblTyhjatKpl.Name = "lblTyhjatKpl";
-            lblTyhjatKpl.Size = new Size(160, 38);
-            lblTyhjatKpl.TabIndex = 5;
-            lblTyhjatKpl.Text = "Tyhjät: - kpl";
+            btnTyhjenna.BackColor = Color.White;
+            btnTyhjenna.FlatStyle = FlatStyle.Popup;
+            btnTyhjenna.Location = new Point(43, 151);
+            btnTyhjenna.Name = "btnTyhjenna";
+            btnTyhjenna.Size = new Size(190, 40);
+            btnTyhjenna.TabIndex = 7;
+            btnTyhjenna.Text = "Tyhjennä";
+            btnTyhjenna.UseVisualStyleBackColor = false;
+            btnTyhjenna.Click += btnTyhjenna_Click;
             // 
-            // lblAlueitaKpl
+            // btnPoista
             // 
-            lblAlueitaKpl.AutoSize = true;
-            lblAlueitaKpl.Font = new Font("Segoe UI", 16.2F);
-            lblAlueitaKpl.Location = new Point(49, 85);
-            lblAlueitaKpl.Name = "lblAlueitaKpl";
-            lblAlueitaKpl.Size = new Size(173, 38);
-            lblAlueitaKpl.TabIndex = 4;
-            lblAlueitaKpl.Text = "Alueita: - kpl";
+            btnPoista.BackColor = Color.White;
+            btnPoista.FlatStyle = FlatStyle.Popup;
+            btnPoista.Location = new Point(435, 105);
+            btnPoista.Name = "btnPoista";
+            btnPoista.Size = new Size(190, 40);
+            btnPoista.TabIndex = 6;
+            btnPoista.Text = "Poista";
+            btnPoista.UseVisualStyleBackColor = false;
+            btnPoista.Click += btnPoista_Click;
             // 
-            // lblAktiivisetKpl
+            // btnMuokkaa
             // 
-            lblAktiivisetKpl.AutoSize = true;
-            lblAktiivisetKpl.Font = new Font("Segoe UI", 16.2F);
-            lblAktiivisetKpl.Location = new Point(49, 140);
-            lblAktiivisetKpl.Name = "lblAktiivisetKpl";
-            lblAktiivisetKpl.Size = new Size(198, 38);
-            lblAktiivisetKpl.TabIndex = 3;
-            lblAktiivisetKpl.Text = "Aktiiviset: - kpl";
+            btnMuokkaa.BackColor = Color.White;
+            btnMuokkaa.FlatStyle = FlatStyle.Popup;
+            btnMuokkaa.Location = new Point(239, 105);
+            btnMuokkaa.Name = "btnMuokkaa";
+            btnMuokkaa.Size = new Size(190, 40);
+            btnMuokkaa.TabIndex = 5;
+            btnMuokkaa.Text = "Tallenna";
+            btnMuokkaa.UseVisualStyleBackColor = false;
+            btnMuokkaa.Click += btnMuokkaa_Click;
             // 
-            // label4
+            // btnLisaa
             // 
-            label4.AutoSize = true;
-            label4.Font = new Font("Segoe UI", 16.2F);
-            label4.Location = new Point(49, 17);
-            label4.Name = "label4";
-            label4.Size = new Size(106, 38);
-            label4.TabIndex = 2;
-            label4.Text = "Tilastot";
+            btnLisaa.BackColor = Color.White;
+            btnLisaa.FlatStyle = FlatStyle.Popup;
+            btnLisaa.Location = new Point(43, 105);
+            btnLisaa.Name = "btnLisaa";
+            btnLisaa.Size = new Size(190, 40);
+            btnLisaa.TabIndex = 4;
+            btnLisaa.Text = "Lisää";
+            btnLisaa.UseVisualStyleBackColor = false;
+            btnLisaa.Click += btnLisaa_Click;
             // 
-            // alaPanel
+            // txtNimi
             // 
-            alaPanel.Controls.Add(lblNimi);
-            alaPanel.Controls.Add(label2);
-            alaPanel.Controls.Add(lblValittu);
-            alaPanel.Dock = DockStyle.Bottom;
-            alaPanel.Location = new Point(0, 701);
-            alaPanel.Name = "alaPanel";
-            alaPanel.Size = new Size(1216, 207);
-            alaPanel.TabIndex = 3;
+            txtNimi.BackColor = Color.White;
+            txtNimi.Location = new Point(43, 64);
+            txtNimi.Name = "txtNimi";
+            txtNimi.Size = new Size(522, 23);
+            txtNimi.TabIndex = 3;
             // 
             // lblNimi
             // 
             lblNimi.AutoSize = true;
-            lblNimi.Font = new Font("Segoe UI", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblNimi.Location = new Point(197, 80);
+            lblNimi.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblNimi.Location = new Point(43, 44);
             lblNimi.Name = "lblNimi";
-            lblNimi.Size = new Size(28, 38);
-            lblNimi.TabIndex = 5;
-            lblNimi.Text = "-";
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label2.Location = new Point(69, 80);
-            label2.Name = "label2";
-            label2.Size = new Size(82, 38);
-            label2.TabIndex = 2;
-            label2.Text = "Nimi:";
-            // 
-            // lblValittu
-            // 
-            lblValittu.AutoSize = true;
-            lblValittu.Font = new Font("Segoe UI", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblValittu.Location = new Point(69, 22);
-            lblValittu.Name = "lblValittu";
-            lblValittu.Size = new Size(160, 38);
-            lblValittu.TabIndex = 1;
-            lblValittu.Text = "Valittu alue:";
+            lblNimi.Size = new Size(78, 17);
+            lblNimi.TabIndex = 2;
+            lblNimi.Text = "Alueen nimi:";
             // 
             // AlueetView
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(alaPanel);
             Controls.Add(keskiPanel);
             Controls.Add(ylaPanel);
-            Margin = new Padding(3, 4, 3, 4);
             Name = "AlueetView";
-            Size = new Size(1216, 908);
+            Size = new Size(1064, 681);
             ylaPanel.ResumeLayout(false);
             ylaPanel.PerformLayout();
             keskiPanel.ResumeLayout(false);
             panelVasen.ResumeLayout(false);
             panelVasen.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvAlueet).EndInit();
             panelOikea.ResumeLayout(false);
             panelOikea.PerformLayout();
-            alaPanel.ResumeLayout(false);
-            alaPanel.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -232,16 +227,18 @@
         private Panel keskiPanel;
         private Panel alaPanel;
         private Label lblTitle;
-        private ListBox listBoxVasen;
-        private Label lblNimi;
+        private Button btnPoista;
+        private Button btnMuokkaa;
+        private Button btnLisaa;
+        private TextBox txtNimi;
+        private Button btnTyhjenna;
         private Label label2;
         private Label lblValittu;
         private Panel panelOikea;
         private Label label1;
         private Panel panelVasen;
-        private Label lblTyhjatKpl;
-        private Label lblAlueitaKpl;
-        private Label lblAktiivisetKpl;
-        private Label label4;
+        private TextBox txtHaku;
+        private Label lblNimi;
+        private DataGridView dgvAlueet;
     }
 }

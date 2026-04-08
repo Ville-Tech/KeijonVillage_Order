@@ -24,8 +24,6 @@ namespace VillageNewbies_Projekti.Views
         // -------------------------------
         private void SetupUI()
         {
-            // Title from Designer
-            label1.Text = "Palvelut";
 
             // Create clickable service labels
             CreateMenuLabel("🏡 Varaa mökki", new Point(50, 120), out lblMokit);

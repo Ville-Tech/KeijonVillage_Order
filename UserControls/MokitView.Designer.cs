@@ -37,8 +37,8 @@
             Size = new Size(1064, 681);
             Load += MokitView_Load;
             ResumeLayout(false);
-            PerformLayout();
         }
+
         #endregion
     }
 }
