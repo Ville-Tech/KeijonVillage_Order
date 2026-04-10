@@ -24,8 +24,6 @@ namespace VillageNewbies_Projekti.Views
             dgvAsiakkaat.ReadOnly = true;
             dgvAsiakkaat.AllowUserToAddRows = false;
             dgvAsiakkaat.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-
-            dgvAsiakkaat.SelectionChanged += DgvAsiakkaat_SelectionChanged;
         }
 
         private void LataaAsiakkaat(string hakusana = "")
@@ -36,18 +34,14 @@ namespace VillageNewbies_Projekti.Views
 
                 if (!string.IsNullOrWhiteSpace(hakusana))
                     asiakkaat = asiakkaat.FindAll(a =>
-                        a != null &&
-                        (
-                            (!string.IsNullOrEmpty(a.Sukunimi) && a.Sukunimi.Contains(hakusana, StringComparison.OrdinalIgnoreCase)) ||
-                            (!string.IsNullOrEmpty(a.Etunimi) && a.Etunimi.Contains(hakusana, StringComparison.OrdinalIgnoreCase)) ||
-                            (!string.IsNullOrEmpty(a.Sahkoposti) && a.Sahkoposti.Contains(hakusana, StringComparison.OrdinalIgnoreCase))
-                        ));
+                        a != null && (
+                        (!string.IsNullOrEmpty(a.Sukunimi) && a.Sukunimi.Contains(hakusana, StringComparison.OrdinalIgnoreCase)) ||
+                        (!string.IsNullOrEmpty(a.Etunimi) && a.Etunimi.Contains(hakusana, StringComparison.OrdinalIgnoreCase)) ||
+                        (!string.IsNullOrEmpty(a.Sahkoposti) && a.Sahkoposti.Contains(hakusana, StringComparison.OrdinalIgnoreCase))));
 
                 dgvAsiakkaat.SelectionChanged -= DgvAsiakkaat_SelectionChanged;
-
                 dgvAsiakkaat.DataSource = null;
                 dgvAsiakkaat.DataSource = asiakkaat;
-
                 dgvAsiakkaat.SelectionChanged += DgvAsiakkaat_SelectionChanged;
             }
             catch (Exception ex)
@@ -59,29 +53,52 @@ namespace VillageNewbies_Projekti.Views
 
         private void DgvAsiakkaat_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
-            if (dgvAsiakkaat.Columns.Count > 0)
+            foreach (DataGridViewColumn col in dgvAsiakkaat.Columns)
+                col.Visible = false;
+
+            if (dgvAsiakkaat.Columns["Asiakas_ID"] != null)
             {
-                dgvAsiakkaat.Columns[0].HeaderText = "ID";
-                dgvAsiakkaat.Columns[0].Width = 40;
+                dgvAsiakkaat.Columns["Asiakas_ID"].Visible = true;
+                dgvAsiakkaat.Columns["Asiakas_ID"].HeaderText = "ID";
+                dgvAsiakkaat.Columns["Asiakas_ID"].Width = 40;
+                dgvAsiakkaat.Columns["Asiakas_ID"].DisplayIndex = 0;
             }
-
-            if (dgvAsiakkaat.Columns.Count > 1)
-                dgvAsiakkaat.Columns[1].HeaderText = "Etunimi";
-
-            if (dgvAsiakkaat.Columns.Count > 2)
-                dgvAsiakkaat.Columns[2].HeaderText = "Sukunimi";
-
-            if (dgvAsiakkaat.Columns.Count > 3)
-                dgvAsiakkaat.Columns[3].HeaderText = "Osoite";
-
-            if (dgvAsiakkaat.Columns.Count > 4)
-                dgvAsiakkaat.Columns[4].HeaderText = "Postinro";
-
-            if (dgvAsiakkaat.Columns.Count > 5)
-                dgvAsiakkaat.Columns[5].HeaderText = "Sähköposti";
-
-            if (dgvAsiakkaat.Columns.Count > 6)
-                dgvAsiakkaat.Columns[6].HeaderText = "Puhelin";
+            if (dgvAsiakkaat.Columns["Etunimi"] != null)
+            {
+                dgvAsiakkaat.Columns["Etunimi"].Visible = true;
+                dgvAsiakkaat.Columns["Etunimi"].HeaderText = "Etunimi";
+                dgvAsiakkaat.Columns["Etunimi"].DisplayIndex = 1;
+            }
+            if (dgvAsiakkaat.Columns["Sukunimi"] != null)
+            {
+                dgvAsiakkaat.Columns["Sukunimi"].Visible = true;
+                dgvAsiakkaat.Columns["Sukunimi"].HeaderText = "Sukunimi";
+                dgvAsiakkaat.Columns["Sukunimi"].DisplayIndex = 2;
+            }
+            if (dgvAsiakkaat.Columns["Lahiosoite"] != null)
+            {
+                dgvAsiakkaat.Columns["Lahiosoite"].Visible = true;
+                dgvAsiakkaat.Columns["Lahiosoite"].HeaderText = "Osoite";
+                dgvAsiakkaat.Columns["Lahiosoite"].DisplayIndex = 3;
+            }
+            if (dgvAsiakkaat.Columns["Postinro"] != null)
+            {
+                dgvAsiakkaat.Columns["Postinro"].Visible = true;
+                dgvAsiakkaat.Columns["Postinro"].HeaderText = "Postinro";
+                dgvAsiakkaat.Columns["Postinro"].DisplayIndex = 4;
+            }
+            if (dgvAsiakkaat.Columns["Sahkoposti"] != null)
+            {
+                dgvAsiakkaat.Columns["Sahkoposti"].Visible = true;
+                dgvAsiakkaat.Columns["Sahkoposti"].HeaderText = "Sähköposti";
+                dgvAsiakkaat.Columns["Sahkoposti"].DisplayIndex = 5;
+            }
+            if (dgvAsiakkaat.Columns["Puhelin"] != null)
+            {
+                dgvAsiakkaat.Columns["Puhelin"].Visible = true;
+                dgvAsiakkaat.Columns["Puhelin"].HeaderText = "Puhelin";
+                dgvAsiakkaat.Columns["Puhelin"].DisplayIndex = 6;
+            }
         }
 
         private void DgvAsiakkaat_SelectionChanged(object sender, EventArgs e)

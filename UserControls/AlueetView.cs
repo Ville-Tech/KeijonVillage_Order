@@ -25,8 +25,6 @@ namespace VillageNewbies_Projekti.Views
             dgvAlueet.ReadOnly = true;
             dgvAlueet.AllowUserToAddRows = false;
             dgvAlueet.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-
-            dgvAlueet.SelectionChanged += DgvAlueet_SelectionChanged;
         }
 
         private void LataaAlueet(string hakusana = "")

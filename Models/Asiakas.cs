@@ -11,6 +11,7 @@
         private string? lahiosoite;
         private string? sahkoposti;
         private string? puhelin;
+        public string KokoNimi => $"{Etunimi} {Sukunimi}";
 
         public int Asiakas_ID
         {

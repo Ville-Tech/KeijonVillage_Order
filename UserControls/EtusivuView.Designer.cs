@@ -216,9 +216,9 @@
             lblTervetuloa.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblTervetuloa.Location = new Point(60, 40);
             lblTervetuloa.Name = "lblTervetuloa";
-            lblTervetuloa.Size = new Size(173, 37);
+            lblTervetuloa.Size = new Size(139, 37);
             lblTervetuloa.TabIndex = 1;
-            lblTervetuloa.Text = "TERVETULOA";
+            lblTervetuloa.Text = "Tervetuloa";
             // 
             // EtusivuView
             // 

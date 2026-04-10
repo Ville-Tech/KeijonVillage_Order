@@ -57,6 +57,26 @@ namespace VillageNewbies_Projekti.Services
             cmd.ExecuteNonQuery();
         }
 
+        public void PaivitaVaraus(Varaus varaus)
+        {
+            using var conn = db.GetConnection();
+            conn.Open();
+            var cmd = new MySqlCommand(@"
+        UPDATE varaus SET
+            asiakas_id       = @asiakas_id,
+            mokki_id         = @mokki_id,
+            varattu_alkupvm  = @varattu_alkupvm,
+            varattu_loppupvm = @varattu_loppupvm
+        WHERE varaus_id = @varaus_id",
+                conn);
+            cmd.Parameters.AddWithValue("@asiakas_id", varaus.Asiakas_ID);
+            cmd.Parameters.AddWithValue("@mokki_id", varaus.Mokki_ID);
+            cmd.Parameters.AddWithValue("@varattu_alkupvm", varaus.Varattu_Alkupvm);
+            cmd.Parameters.AddWithValue("@varattu_loppupvm", varaus.Varattu_Loppupvm);
+            cmd.Parameters.AddWithValue("@varaus_id", varaus.Varaus_ID);
+            cmd.ExecuteNonQuery();
+        }
+
         public void PoistaVaraus(int varausId)
         {
             using var conn = db.GetConnection();

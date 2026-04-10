@@ -75,9 +75,9 @@
             lblTitle.Font = new Font("Segoe UI", 20.25F);
             lblTitle.Location = new Point(60, 40);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(253, 37);
+            lblTitle.Size = new Size(129, 37);
             lblTitle.TabIndex = 0;
-            lblTitle.Text = "Asiakkaiden hallinta";
+            lblTitle.Text = "Asiakkaat";
             // 
             // keskiPanel
             // 
@@ -109,16 +109,15 @@
             dgvAsiakkaat.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvAsiakkaat.Location = new Point(43, 105);
             dgvAsiakkaat.Name = "dgvAsiakkaat";
-            dgvAsiakkaat.Size = new Size(260, 300);
+            dgvAsiakkaat.Size = new Size(300, 350);
             dgvAsiakkaat.TabIndex = 3;
-            dgvAsiakkaat.AutoGenerateColumns = true;
             // 
             // txtHaku
             // 
             txtHaku.BackColor = Color.White;
             txtHaku.Location = new Point(43, 64);
             txtHaku.Name = "txtHaku";
-            txtHaku.Size = new Size(261, 23);
+            txtHaku.Size = new Size(300, 23);
             txtHaku.TabIndex = 2;
             // 
             // label1
@@ -256,6 +255,7 @@
             btnTyhjenna.TabIndex = 7;
             btnTyhjenna.Text = "Tyhjennä";
             btnTyhjenna.UseVisualStyleBackColor = false;
+            btnTyhjenna.Click += btnTyhjenna_Click;
             // 
             // btnPoista
             // 
@@ -267,17 +267,20 @@
             btnPoista.TabIndex = 6;
             btnPoista.Text = "Poista";
             btnPoista.UseVisualStyleBackColor = false;
+            btnPoista.Click += btnPoista_Click;
             // 
             // btnMuokkaa
             // 
+            btnMuokkaa.AccessibleDescription = "btnMuokkaa_Click";
             btnMuokkaa.BackColor = Color.White;
             btnMuokkaa.FlatStyle = FlatStyle.Popup;
             btnMuokkaa.Location = new Point(239, 244);
             btnMuokkaa.Name = "btnMuokkaa";
             btnMuokkaa.Size = new Size(190, 40);
             btnMuokkaa.TabIndex = 5;
-            btnMuokkaa.Text = "Tallenna";
+            btnMuokkaa.Text = "Muokkaa";
             btnMuokkaa.UseVisualStyleBackColor = false;
+            btnMuokkaa.Click += btnMuokkaa_Click;
             // 
             // btnLisaa
             // 
@@ -289,6 +292,7 @@
             btnLisaa.TabIndex = 4;
             btnLisaa.Text = "Lisää";
             btnLisaa.UseVisualStyleBackColor = false;
+            btnLisaa.Click += btnLisaa_Click;
             // 
             // txtEtunimi
             // 
