@@ -15,6 +15,7 @@ namespace VillageNewbies_Projekti.Views
             InitializeComponent();
             MaaritaGrid();
             dgvAlueet.DataBindingComplete += DgvAlueet_DataBindingComplete;
+            txtHaku.TextChanged += txtHaku_TextChanged;
             LataaAlueet();
         }
 
@@ -96,9 +97,6 @@ namespace VillageNewbies_Projekti.Views
                 _alueService.LisaaAlue(new Alue { Nimi = txtNimi.Text.Trim() });
                 TyhjennaLomake();
                 LataaAlueet();
-
-                MessageBox.Show("Alue lisätty!", "Onnistui",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
@@ -161,9 +159,6 @@ namespace VillageNewbies_Projekti.Views
 
                     TyhjennaLomake();
                     LataaAlueet();
-
-                    MessageBox.Show("Alue poistettu.", "Onnistui",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch (Exception ex)
                 {

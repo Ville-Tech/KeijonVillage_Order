@@ -5,6 +5,7 @@ using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using VillageNewbies_Projekti.Models;
 using VillageNewbies_Projekti.Services;
+using VillageNewbies_Projekti.Forms;
 
 namespace VillageNewbies_Projekti.Views
 {
@@ -13,6 +14,7 @@ namespace VillageNewbies_Projekti.Views
         // ── Palvelut ─────────────────────────────────────────────────────────────
         private readonly MokkiService _mokkiService = new MokkiService();
         private readonly VarausService _varausService = new VarausService();
+        private readonly AlueService _alueService = new AlueService();
 
         // Värit korteille — kierrätetään jos mökkejä on enemmän kuin värejä
         private static readonly Color[] ACCENT_COLORS =
@@ -171,6 +173,19 @@ namespace VillageNewbies_Projekti.Views
             };
             btnPaivita.FlatAppearance.BorderColor = Color.FromArgb(200, 200, 220);
             btnPaivita.Click += (s, e) => LataaMokit();
+
+            var btnLisaa = new Button
+            {
+                Text = "＋ Lisää mökki",
+                Font = _fontSub,
+                FlatStyle = FlatStyle.Flat,
+                Cursor = Cursors.Hand,
+                AutoSize = true,
+                Location = new Point(PANEL_PAD + 330, 10),
+            };
+            btnLisaa.FlatAppearance.BorderColor = Color.FromArgb(200, 200, 220);
+            btnLisaa.Click += (s, e) => AvaaLisaysDialog();
+            filterBar.Controls.Add(btnLisaa);
 
             _lblCount = new Label
             {
@@ -341,7 +356,6 @@ namespace VillageNewbies_Projekti.Views
                 g.DrawString(text, _fontSub, b, new Point(x, y));
         }
 
-        // ── Hover ────────────────────────────────────────────────────────────────
         private void CardPanel_MouseMove(object? sender, MouseEventArgs e)
         {
             // Korjattu scroll-offset
@@ -354,7 +368,6 @@ namespace VillageNewbies_Projekti.Views
             _cardPanel.Cursor = _hoverIndex >= 0 ? Cursors.Hand : Cursors.Default;
         }
 
-        // ── Rounded rect ─────────────────────────────────────────────────────────
         private static GraphicsPath RoundedRect(Rectangle r, int radius)
         {
             var path = new GraphicsPath();
@@ -365,6 +378,23 @@ namespace VillageNewbies_Projekti.Views
             path.AddArc(r.X, r.Bottom - d, d, d, 90, 90);
             path.CloseFigure();
             return path;
+        }
+        private void AvaaLisaysDialog()
+        {
+            var dlg = new MokkiLomakeForm(_alueService);
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    _mokkiService.LisaaMokki(dlg.Mokki);
+                    LataaMokit();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Virhe lisäyksessä:\n{ex.Message}", "Virhe",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
     }
 }

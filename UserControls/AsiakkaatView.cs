@@ -14,6 +14,7 @@ namespace VillageNewbies_Projekti.Views
             InitializeComponent();
             MaaritaGrid();
             dgvAsiakkaat.DataBindingComplete += DgvAsiakkaat_DataBindingComplete;
+            txtHaku.TextChanged += txtHaku_TextChanged;
             LataaAsiakkaat();
         }
 
@@ -154,9 +155,6 @@ namespace VillageNewbies_Projekti.Views
 
                 TyhjennaLomake();
                 LataaAsiakkaat();
-
-                MessageBox.Show("Asiakas lisätty!", "Onnistui",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
@@ -216,9 +214,6 @@ namespace VillageNewbies_Projekti.Views
 
                     TyhjennaLomake();
                     LataaAsiakkaat();
-
-                    MessageBox.Show("Asiakas poistettu.", "Onnistui",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch (Exception ex)
                 {

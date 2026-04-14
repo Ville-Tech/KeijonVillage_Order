@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Forms;
 using VillageNewbies_Projekti.Models;
 using VillageNewbies_Projekti.Services;
@@ -10,115 +11,96 @@ namespace VillageNewbies_Projekti.Views
         private readonly VarausService _varausService = new VarausService();
         private readonly AsiakasService _asiakasService = new AsiakasService();
         private readonly MokkiService _mokkiService = new MokkiService();
-        private readonly AlueService _alueService = new AlueService();
 
         public VarauksetView()
         {
             InitializeComponent();
             MaaritaGrid();
+            txtHaku.TextChanged += txtHaku_TextChanged;
             LataaDropdownit();
             LataaVaraukset();
-
-            txtHaku.TextChanged += txtHaku_TextChanged;
-            dgvVaraukset.SelectionChanged -= DgvVaraukset_SelectionChanged;
-            dgvVaraukset.SelectionChanged += DgvVaraukset_SelectionChanged;
         }
 
         private void MaaritaGrid()
         {
+            dgvVaraukset.AutoGenerateColumns = false;
             dgvVaraukset.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvVaraukset.MultiSelect = false;
             dgvVaraukset.ReadOnly = true;
             dgvVaraukset.AllowUserToAddRows = false;
             dgvVaraukset.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+            dgvVaraukset.Columns.Clear();
+
+            dgvVaraukset.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "Varaus_ID",
+                HeaderText = "ID",
+                Width = 40
+            });
+
+            dgvVaraukset.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "Asiakas",
+                HeaderText = "Asiakas"
+            });
+
+            dgvVaraukset.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "Mokki",
+                HeaderText = "Mökki"
+            });
+
+            dgvVaraukset.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "Alkaa",
+                HeaderText = "Alkaa"
+            });
+
+            dgvVaraukset.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "Loppuu",
+                HeaderText = "Loppuu"
+            });
         }
 
         private void LataaDropdownit()
         {
-            try
-            {
-                var asiakkaat = _asiakasService.HaeAsiakkaat();
-                cmbAsiakas.DataSource = asiakkaat;
-                cmbAsiakas.DisplayMember = "KokoNimi";
-                cmbAsiakas.ValueMember = "Asiakas_ID";
-                cmbAsiakas.SelectedIndex = -1;
-            }
-            catch { }
+            cmbAsiakas.DataSource = _asiakasService.HaeAsiakkaat();
+            cmbAsiakas.DisplayMember = "KokoNimi";
+            cmbAsiakas.ValueMember = "Asiakas_ID";
+            cmbAsiakas.SelectedIndex = -1;
 
-            try
-            {
-                var mokit = _mokkiService.HaeMokit();
-                cmbMokki.DataSource = mokit;
-                cmbMokki.DisplayMember = "Mokkinimi";
-                cmbMokki.ValueMember = "Mokki_ID";
-                cmbMokki.SelectedIndex = -1;
-            }
-            catch { }
+            cmbMokki.DataSource = _mokkiService.HaeMokit();
+            cmbMokki.DisplayMember = "Mokkinimi";
+            cmbMokki.ValueMember = "Mokki_ID";
+            cmbMokki.SelectedIndex = -1;
         }
 
         private void LataaVaraukset(string hakusana = "")
         {
-            try
-            {
-                var varaukset = _varausService.HaeVaraukset();
-                var asiakkaat = _asiakasService.HaeAsiakkaat();
-                var mokit = _mokkiService.HaeMokit();
-
-                var nakyma = varaukset.ConvertAll(v => new
-                {
-                    v.Varaus_ID,
-                    Asiakas = asiakkaat.Find(a => a.Asiakas_ID == v.Asiakas_ID)
-                        ?.Sukunimi ?? "-",
-                    Mokki = mokit.Find(m => m.Mokki_ID == v.Mokki_ID)
-                        ?.Mokkinimi ?? "-",
-                    Alkaa = v.Varattu_Alkupvm?.ToString("dd.MM.yyyy") ?? "-",
-                    Loppuu = v.Varattu_Loppupvm?.ToString("dd.MM.yyyy") ?? "-"
-                });
-
-                if (!string.IsNullOrWhiteSpace(hakusana))
-                    nakyma = nakyma.FindAll(n =>
-                        n.Asiakas.Contains(hakusana, StringComparison.OrdinalIgnoreCase) ||
-                        n.Mokki.Contains(hakusana, StringComparison.OrdinalIgnoreCase));
-
-                dgvVaraukset.SelectionChanged -= DgvVaraukset_SelectionChanged;
-                dgvVaraukset.DataSource = null;
-                dgvVaraukset.DataSource = nakyma;
-
-                if (dgvVaraukset.Columns.Count > 0 && nakyma.Count > 0)
-                {
-                    dgvVaraukset.Columns[0].HeaderText = "ID";
-                    dgvVaraukset.Columns[0].Width = 40;
-                    dgvVaraukset.Columns[1].HeaderText = "Asiakas";
-                    dgvVaraukset.Columns[2].HeaderText = "Mökki";
-                    dgvVaraukset.Columns[3].HeaderText = "Alkaa";
-                    dgvVaraukset.Columns[4].HeaderText = "Loppuu";
-                }
-
-                dgvVaraukset.SelectionChanged += DgvVaraukset_SelectionChanged;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Virhe varausten haussa:\n{ex.Message}", "Virhe",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void DgvVaraukset_SelectionChanged(object sender, EventArgs e)
-        {
-            if (dgvVaraukset.CurrentRow == null) return;
-
-            int id = (int)dgvVaraukset.CurrentRow.Cells[0].Value;
             var varaukset = _varausService.HaeVaraukset();
-            var v = varaukset.Find(x => x.Varaus_ID == id);
-            if (v == null) return;
+            var asiakkaat = _asiakasService.HaeAsiakkaat();
+            var mokit = _mokkiService.HaeMokit();
 
-            cmbAsiakas.SelectedValue = v.Asiakas_ID;
-            cmbMokki.SelectedValue = v.Mokki_ID;
+            var nakyma = varaukset.Select(v => new
+            {
+                v.Varaus_ID,
+                Asiakas = asiakkaat.FirstOrDefault(a => a.Asiakas_ID == v.Asiakas_ID)?.KokoNimi ?? "-",
+                Mokki = mokit.FirstOrDefault(m => m.Mokki_ID == v.Mokki_ID)?.Mokkinimi ?? "-",
+                Alkaa = v.Varattu_Alkupvm?.ToString("dd.MM.yyyy") ?? "-",
+                Loppuu = v.Varattu_Loppupvm?.ToString("dd.MM.yyyy") ?? "-"
+            }).ToList();
 
-            if (v.Varattu_Alkupvm.HasValue)
-                dtpAlku.Value = v.Varattu_Alkupvm.Value;
-            if (v.Varattu_Loppupvm.HasValue)
-                dtpLoppu.Value = v.Varattu_Loppupvm.Value;
+            if (!string.IsNullOrWhiteSpace(hakusana))
+            {
+                nakyma = nakyma.Where(n =>
+                    n.Asiakas.Contains(hakusana, StringComparison.OrdinalIgnoreCase) ||
+                    n.Mokki.Contains(hakusana, StringComparison.OrdinalIgnoreCase)
+                ).ToList();
+            }
+
+            dgvVaraukset.DataSource = nakyma;
         }
 
         private void txtHaku_TextChanged(object sender, EventArgs e)
@@ -130,15 +112,13 @@ namespace VillageNewbies_Projekti.Views
         {
             if (cmbAsiakas.SelectedValue == null || cmbMokki.SelectedValue == null)
             {
-                MessageBox.Show("Valitse asiakas ja mökki.", "Huomio",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Valitse asiakas ja mökki.");
                 return null;
             }
 
             if (dtpLoppu.Value.Date <= dtpAlku.Value.Date)
             {
-                MessageBox.Show("Lähtöpäivän pitää olla saapumispäivän jälkeen.", "Huomio",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Lähtöpäivän pitää olla saapumispäivän jälkeen.");
                 return null;
             }
 
@@ -157,7 +137,6 @@ namespace VillageNewbies_Projekti.Views
             var v = LomakkeestaMokki();
             if (v == null) return;
 
-            // Tarkista ettei mökki ole jo varattuna
             if (!_varausService.OnkoVapaa(v.Mokki_ID, v.Varattu_Alkupvm!.Value, v.Varattu_Loppupvm!.Value))
             {
                 MessageBox.Show("Mökki on jo varattuna valitulle ajanjaksolle!", "Varattu",
@@ -170,8 +149,6 @@ namespace VillageNewbies_Projekti.Views
                 _varausService.LisaaVaraus(v);
                 TyhjennaLomake();
                 LataaVaraukset();
-                MessageBox.Show("Varaus lisätty!", "Onnistui",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
@@ -191,6 +168,7 @@ namespace VillageNewbies_Projekti.Views
 
             var v = LomakkeestaMokki();
             if (v == null) return;
+
             v.Varaus_ID = (int)dgvVaraukset.CurrentRow.Cells[0].Value;
 
             try
@@ -230,8 +208,6 @@ namespace VillageNewbies_Projekti.Views
                     _varausService.PoistaVaraus(id);
                     TyhjennaLomake();
                     LataaVaraukset();
-                    MessageBox.Show("Varaus poistettu.", "Onnistui",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch (Exception ex)
                 {

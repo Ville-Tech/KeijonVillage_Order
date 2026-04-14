@@ -56,12 +56,6 @@ namespace VillageNewbies_Projekti.Views
             AddHoverEffect(lblVene);
             AddHoverEffect(lblAktiviteetit);
             AddHoverEffect(lblVaraukset);
-
-            lblMokit.Click += (s, e) => MessageBox.Show("Mökkien varaus avataan.");
-            lblSauna.Click += (s, e) => MessageBox.Show("Saunan varaus avataan.");
-            lblVene.Click += (s, e) => MessageBox.Show("Venevuokraus avataan.");
-            lblAktiviteetit.Click += (s, e) => MessageBox.Show("Aktiviteetit avataan.");
-            lblVaraukset.Click += (s, e) => MessageBox.Show("Omat varaukset avataan.");
         }
 
         private void AddHoverEffect(Label label)
