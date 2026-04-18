@@ -48,11 +48,19 @@
             btnMuokkaa = new Button();
             btnLisaa = new Button();
             lblAsiakas = new Label();
+            label5 = new Label();
+            cmbPalvelu = new ComboBox();
+            label6 = new Label();
+            txtLkm = new TextBox();
+            btnLisaaPalvelu = new Button();
+            btnPoistaPalvelu = new Button();
+            dgvVarauksenPalvelut = new DataGridView();
             ylaPanel.SuspendLayout();
             keskiPanel.SuspendLayout();
             panelVasen.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvVaraukset).BeginInit();
             panelOikea.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvVarauksenPalvelut).BeginInit();
             SuspendLayout();
             // 
             // ylaPanel
@@ -128,6 +136,13 @@
             // 
             // panelOikea
             // 
+            panelOikea.Controls.Add(dgvVarauksenPalvelut);
+            panelOikea.Controls.Add(btnPoistaPalvelu);
+            panelOikea.Controls.Add(btnLisaaPalvelu);
+            panelOikea.Controls.Add(txtLkm);
+            panelOikea.Controls.Add(label6);
+            panelOikea.Controls.Add(cmbPalvelu);
+            panelOikea.Controls.Add(label5);
             panelOikea.Controls.Add(dtpLoppu);
             panelOikea.Controls.Add(dtpAlku);
             panelOikea.Controls.Add(cmbMokki);
@@ -215,7 +230,7 @@
             btnTyhjenna.Name = "btnTyhjenna";
             btnTyhjenna.Size = new Size(190, 40);
             btnTyhjenna.TabIndex = 7;
-            btnTyhjenna.Text = "Tyhjennä";
+            btnTyhjenna.Text = "Tyhjennä varaus";
             btnTyhjenna.UseVisualStyleBackColor = false;
             btnTyhjenna.Click += btnTyhjenna_Click;
             // 
@@ -227,7 +242,7 @@
             btnPoista.Name = "btnPoista";
             btnPoista.Size = new Size(190, 40);
             btnPoista.TabIndex = 6;
-            btnPoista.Text = "Poista";
+            btnPoista.Text = "Poista varaus";
             btnPoista.UseVisualStyleBackColor = false;
             btnPoista.Click += btnPoista_Click;
             // 
@@ -239,7 +254,7 @@
             btnMuokkaa.Name = "btnMuokkaa";
             btnMuokkaa.Size = new Size(190, 40);
             btnMuokkaa.TabIndex = 5;
-            btnMuokkaa.Text = "Muokkaa";
+            btnMuokkaa.Text = "Muokkaa varausta";
             btnMuokkaa.UseVisualStyleBackColor = false;
             btnMuokkaa.Click += btnMuokkaa_Click;
             // 
@@ -251,7 +266,7 @@
             btnLisaa.Name = "btnLisaa";
             btnLisaa.Size = new Size(190, 40);
             btnLisaa.TabIndex = 4;
-            btnLisaa.Text = "Lisää";
+            btnLisaa.Text = "Lisää varaus";
             btnLisaa.UseVisualStyleBackColor = false;
             btnLisaa.Click += btnLisaa_Click;
             // 
@@ -264,6 +279,73 @@
             lblAsiakas.Size = new Size(91, 17);
             lblAsiakas.TabIndex = 2;
             lblAsiakas.Text = "Valitse asiakas";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Font = new Font("Segoe UI", 9.75F);
+            label5.Location = new Point(43, 277);
+            label5.Name = "label5";
+            label5.Size = new Size(119, 17);
+            label5.TabIndex = 23;
+            label5.Text = "Varauksen palvelut:";
+            // 
+            // cmbPalvelu
+            // 
+            cmbPalvelu.FormattingEnabled = true;
+            cmbPalvelu.Location = new Point(43, 297);
+            cmbPalvelu.Name = "cmbPalvelu";
+            cmbPalvelu.Size = new Size(220, 23);
+            cmbPalvelu.TabIndex = 24;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Font = new Font("Segoe UI", 9.75F);
+            label6.Location = new Point(276, 277);
+            label6.Name = "label6";
+            label6.Size = new Size(46, 17);
+            label6.TabIndex = 25;
+            label6.Text = "Määrä";
+            // 
+            // txtLkm
+            // 
+            txtLkm.Location = new Point(276, 297);
+            txtLkm.Name = "txtLkm";
+            txtLkm.Size = new Size(60, 23);
+            txtLkm.TabIndex = 26;
+            txtLkm.Text = "1";
+            // 
+            // btnLisaaPalvelu
+            // 
+            btnLisaaPalvelu.BackColor = Color.White;
+            btnLisaaPalvelu.FlatStyle = FlatStyle.Popup;
+            btnLisaaPalvelu.Location = new Point(43, 326);
+            btnLisaaPalvelu.Name = "btnLisaaPalvelu";
+            btnLisaaPalvelu.Size = new Size(190, 40);
+            btnLisaaPalvelu.TabIndex = 27;
+            btnLisaaPalvelu.Text = "Lisää palvelu";
+            btnLisaaPalvelu.UseVisualStyleBackColor = false;
+            // 
+            // btnPoistaPalvelu
+            // 
+            btnPoistaPalvelu.BackColor = Color.White;
+            btnPoistaPalvelu.FlatStyle = FlatStyle.Popup;
+            btnPoistaPalvelu.Location = new Point(239, 326);
+            btnPoistaPalvelu.Name = "btnPoistaPalvelu";
+            btnPoistaPalvelu.Size = new Size(190, 40);
+            btnPoistaPalvelu.TabIndex = 28;
+            btnPoistaPalvelu.Text = "Poista palvelu";
+            btnPoistaPalvelu.UseVisualStyleBackColor = false;
+            // 
+            // dgvVarauksenPalvelut
+            // 
+            dgvVarauksenPalvelut.BackgroundColor = Color.White;
+            dgvVarauksenPalvelut.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvVarauksenPalvelut.Location = new Point(43, 376);
+            dgvVarauksenPalvelut.Name = "dgvVarauksenPalvelut";
+            dgvVarauksenPalvelut.Size = new Size(580, 150);
+            dgvVarauksenPalvelut.TabIndex = 29;
             // 
             // VarauksetView
             // 
@@ -281,6 +363,7 @@
             ((System.ComponentModel.ISupportInitialize)dgvVaraukset).EndInit();
             panelOikea.ResumeLayout(false);
             panelOikea.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvVarauksenPalvelut).EndInit();
             ResumeLayout(false);
         }
 
@@ -308,5 +391,12 @@
         private ComboBox cmbAsiakas;
         private DateTimePicker dtpLoppu;
         private DateTimePicker dtpAlku;
+        private Label label5;
+        private Label label6;
+        private ComboBox cmbPalvelu;
+        private Button btnPoistaPalvelu;
+        private Button btnLisaaPalvelu;
+        private TextBox txtLkm;
+        private DataGridView dgvVarauksenPalvelut;
     }
 }
