@@ -81,10 +81,28 @@ namespace VillageNewbies_Projekti.Services
         {
             using var conn = db.GetConnection();
             conn.Open();
-            var cmd = new MySqlCommand(
-                "DELETE FROM varaus WHERE varaus_id = @varaus_id", conn);
-            cmd.Parameters.AddWithValue("@varaus_id", varausId);
-            cmd.ExecuteNonQuery();
+            using var trans = conn.BeginTransaction();
+            try
+            {
+                var cmd1 = new MySqlCommand("DELETE FROM varauksen_palvelut WHERE varaus_id = @id", conn, trans);
+                cmd1.Parameters.AddWithValue("@id", varausId);
+                cmd1.ExecuteNonQuery();
+
+                var cmd2 = new MySqlCommand("DELETE FROM lasku WHERE varaus_id = @id", conn, trans);
+                cmd2.Parameters.AddWithValue("@id", varausId);
+                cmd2.ExecuteNonQuery();
+
+                var cmd3 = new MySqlCommand("DELETE FROM varaus WHERE varaus_id = @id", conn, trans);
+                cmd3.Parameters.AddWithValue("@id", varausId);
+                cmd3.ExecuteNonQuery();
+
+                trans.Commit();
+            }
+            catch
+            {
+                trans.Rollback();
+                throw;
+            }
         }
 
         private Varaus LueVaraus(MySqlDataReader r)
