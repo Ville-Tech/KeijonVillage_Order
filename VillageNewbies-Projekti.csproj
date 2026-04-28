@@ -7,7 +7,16 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>kuva_2026-04-28_191252099.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Images\VillageNewbies.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="kuva_2026-04-28_191252099.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
@@ -39,6 +48,12 @@
 
   <ItemGroup>
     <PackageReference Include="MySqlConnector" Version="2.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\VillageNewbies.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>
