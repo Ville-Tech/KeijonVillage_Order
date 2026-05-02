@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Forms;
 using VillageNewbies_Projekti.Models;
 using VillageNewbies_Projekti.Services;
@@ -17,13 +18,14 @@ namespace VillageNewbies_Projekti.Forms
         public MokkiLomakeForm(AlueService alueService)
         {
             this.Text = "Lisää mökki";
-            this.Size = new System.Drawing.Size(480, 660);
+            this.Size = new System.Drawing.Size(480, 680);
             this.StartPosition = FormStartPosition.CenterParent;
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
 
             int y = 20;
+            int tabIdx = 0;
 
             void LisaaKentta(string otsikko, Control ctrl, int extraH = 0)
             {
@@ -35,6 +37,7 @@ namespace VillageNewbies_Projekti.Forms
                     Font = new System.Drawing.Font("Segoe UI", 9f)
                 };
                 ctrl.Location = new System.Drawing.Point(20, y + 20);
+                ctrl.TabIndex = tabIdx++;
                 if (ctrl is TextBox tb) tb.Width = 420;
                 if (ctrl is ComboBox cb) cb.Width = 420;
                 this.Controls.Add(lbl);
@@ -67,7 +70,7 @@ namespace VillageNewbies_Projekti.Forms
                 Height = 80,
                 Width = 420,
                 ScrollBars = ScrollBars.Vertical,
-                MaxLength = 150 // tietokannan VARCHAR(150) mukaan
+                MaxLength = 150
             };
             LisaaKentta("Kuvaus", txtKuvaus, extraH: 55);
 
@@ -80,8 +83,9 @@ namespace VillageNewbies_Projekti.Forms
                 Location = new System.Drawing.Point(20, y + 10),
                 Size = new System.Drawing.Size(190, 38),
                 FlatStyle = FlatStyle.Popup,
-                BackColor = System.Drawing.Color.White,
-                DialogResult = DialogResult.None
+                BackColor = System.Drawing.Color.FromArgb(200, 235, 215),
+                DialogResult = DialogResult.None,
+                TabIndex = tabIdx++
             };
             btnOk.Click += BtnOk_Click;
 
@@ -92,11 +96,14 @@ namespace VillageNewbies_Projekti.Forms
                 Size = new System.Drawing.Size(190, 38),
                 FlatStyle = FlatStyle.Popup,
                 BackColor = System.Drawing.Color.White,
-                DialogResult = DialogResult.Cancel
+                DialogResult = DialogResult.Cancel,
+                TabIndex = tabIdx++
             };
 
             this.Controls.Add(btnOk);
             this.Controls.Add(btnPeruuta);
+            this.AcceptButton = btnOk;
+            this.CancelButton = btnPeruuta;
 
             try
             {
@@ -111,24 +118,45 @@ namespace VillageNewbies_Projekti.Forms
 
         private void BtnOk_Click(object sender, EventArgs e)
         {
-            if (cmbAlue.SelectedValue == null ||
-                string.IsNullOrWhiteSpace(txtNimi.Text) ||
-                string.IsNullOrWhiteSpace(txtPostinro.Text) ||
-                string.IsNullOrWhiteSpace(txtHinta.Text))
+            // Pakolliset kentät
+            if (cmbAlue.SelectedValue == null)
             {
-                MessageBox.Show("Täytä pakolliset kentät: Alue, Nimi, Postinumero, Hinta.",
-                    "Huomio", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                MessageBox.Show("Valitse alue.", "Huomio", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cmbAlue.Focus(); return;
             }
-
+            if (string.IsNullOrWhiteSpace(txtNimi.Text))
+            {
+                MessageBox.Show("Mökin nimi on pakollinen.", "Huomio", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtNimi.Focus(); return;
+            }
+            if (string.IsNullOrWhiteSpace(txtPostinro.Text))
+            {
+                MessageBox.Show("Postinumero on pakollinen.", "Huomio", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtPostinro.Focus(); return;
+            }
+            if (txtPostinro.Text.Length != 5 || !txtPostinro.Text.All(char.IsDigit))
+            {
+                MessageBox.Show("Postinumeron on oltava tasan 5 numeroa.", "Huomio", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtPostinro.Focus(); return;
+            }
+            if (string.IsNullOrWhiteSpace(txtHinta.Text))
+            {
+                MessageBox.Show("Hinta on pakollinen.", "Huomio", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtHinta.Focus(); return;
+            }
             if (!double.TryParse(txtHinta.Text.Replace(",", "."),
                 System.Globalization.NumberStyles.Any,
                 System.Globalization.CultureInfo.InvariantCulture,
-                out double hinta))
+                out double hinta) || hinta < 0)
             {
-                MessageBox.Show("Hinta ei ole kelvollinen luku.", "Huomio",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                MessageBox.Show("Hinta ei ole kelvollinen positiivinen luku.", "Huomio", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtHinta.Focus(); return;
+            }
+            if (!string.IsNullOrWhiteSpace(txtHenkilomaara.Text) &&
+                (!int.TryParse(txtHenkilomaara.Text, out int hlomCheck) || hlomCheck < 0))
+            {
+                MessageBox.Show("Henkilömäärän täytyy olla positiivinen kokonaisluku.", "Huomio", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtHenkilomaara.Focus(); return;
             }
 
             int.TryParse(txtHenkilomaara.Text, out int hlom);

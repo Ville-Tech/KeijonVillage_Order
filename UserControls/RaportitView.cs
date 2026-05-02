@@ -8,9 +8,6 @@ using VillageNewbies_Projekti.Services;
 
 namespace VillageNewbies_Projekti.Views
 {
-    /// <summary>
-    /// Raportit-näkymä: majoittumisraportti ja lisäpalveluraportti aikajaksolla/alueella.
-    /// </summary>
     public partial class RaportitView : UserControl
     {
         // ── Palvelut ─────────────────────────────────────────────────────────────

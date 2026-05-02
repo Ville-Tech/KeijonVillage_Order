@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Forms;
 using VillageNewbies_Projekti.Models;
 using VillageNewbies_Projekti.Services;
@@ -7,7 +8,7 @@ namespace VillageNewbies_Projekti.Views
 {
     public partial class AsiakkaatView : UserControl
     {
-        private readonly AsiakasService _asiakasService = new AsiakasService();
+        private readonly AsiakasService _asiakasService = new();
 
         public AsiakkaatView()
         {
@@ -15,6 +16,7 @@ namespace VillageNewbies_Projekti.Views
             MaaritaGrid();
             dgvAsiakkaat.DataBindingComplete += DgvAsiakkaat_DataBindingComplete;
             txtHaku.TextChanged += txtHaku_TextChanged;
+            MaaritaTabJarjestys();
             LataaAsiakkaat();
         }
 
@@ -25,6 +27,21 @@ namespace VillageNewbies_Projekti.Views
             dgvAsiakkaat.ReadOnly = true;
             dgvAsiakkaat.AllowUserToAddRows = false;
             dgvAsiakkaat.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvAsiakkaat.AlternatingRowsDefaultCellStyle = new DataGridViewCellStyle
+            {
+                BackColor = System.Drawing.Color.FromArgb(245, 246, 250)
+            };
+        }
+
+        private void MaaritaTabJarjestys()
+        {
+            txtHaku.TabIndex = 0;
+            txtEtunimi.TabIndex = 1;
+            txtSukunimi.TabIndex = 2;
+            txtLahiosoite.TabIndex = 3;
+            txtPostinro.TabIndex = 4;
+            txtEmail.TabIndex = 5;
+            txtPuhelin.TabIndex = 6;
         }
 
         private void LataaAsiakkaat(string hakusana = "")
@@ -54,59 +71,27 @@ namespace VillageNewbies_Projekti.Views
 
         private void DgvAsiakkaat_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
+            string[] naytettavat = { "Asiakas_ID", "Etunimi", "Sukunimi", "Lahiosoite", "Postinro", "Sahkoposti", "Puhelin" };
+            string[] otsikot = { "ID", "Etunimi", "Sukunimi", "Osoite", "Postinro", "Sähköposti", "Puhelin" };
+
             foreach (DataGridViewColumn col in dgvAsiakkaat.Columns)
                 col.Visible = false;
 
-            if (dgvAsiakkaat.Columns["Asiakas_ID"] != null)
+            for (int i = 0; i < naytettavat.Length; i++)
             {
-                dgvAsiakkaat.Columns["Asiakas_ID"].Visible = true;
-                dgvAsiakkaat.Columns["Asiakas_ID"].HeaderText = "ID";
-                dgvAsiakkaat.Columns["Asiakas_ID"].Width = 40;
-                dgvAsiakkaat.Columns["Asiakas_ID"].DisplayIndex = 0;
-            }
-            if (dgvAsiakkaat.Columns["Etunimi"] != null)
-            {
-                dgvAsiakkaat.Columns["Etunimi"].Visible = true;
-                dgvAsiakkaat.Columns["Etunimi"].HeaderText = "Etunimi";
-                dgvAsiakkaat.Columns["Etunimi"].DisplayIndex = 1;
-            }
-            if (dgvAsiakkaat.Columns["Sukunimi"] != null)
-            {
-                dgvAsiakkaat.Columns["Sukunimi"].Visible = true;
-                dgvAsiakkaat.Columns["Sukunimi"].HeaderText = "Sukunimi";
-                dgvAsiakkaat.Columns["Sukunimi"].DisplayIndex = 2;
-            }
-            if (dgvAsiakkaat.Columns["Lahiosoite"] != null)
-            {
-                dgvAsiakkaat.Columns["Lahiosoite"].Visible = true;
-                dgvAsiakkaat.Columns["Lahiosoite"].HeaderText = "Osoite";
-                dgvAsiakkaat.Columns["Lahiosoite"].DisplayIndex = 3;
-            }
-            if (dgvAsiakkaat.Columns["Postinro"] != null)
-            {
-                dgvAsiakkaat.Columns["Postinro"].Visible = true;
-                dgvAsiakkaat.Columns["Postinro"].HeaderText = "Postinro";
-                dgvAsiakkaat.Columns["Postinro"].DisplayIndex = 4;
-            }
-            if (dgvAsiakkaat.Columns["Sahkoposti"] != null)
-            {
-                dgvAsiakkaat.Columns["Sahkoposti"].Visible = true;
-                dgvAsiakkaat.Columns["Sahkoposti"].HeaderText = "Sähköposti";
-                dgvAsiakkaat.Columns["Sahkoposti"].DisplayIndex = 5;
-            }
-            if (dgvAsiakkaat.Columns["Puhelin"] != null)
-            {
-                dgvAsiakkaat.Columns["Puhelin"].Visible = true;
-                dgvAsiakkaat.Columns["Puhelin"].HeaderText = "Puhelin";
-                dgvAsiakkaat.Columns["Puhelin"].DisplayIndex = 6;
+                if (dgvAsiakkaat.Columns[naytettavat[i]] is DataGridViewColumn c)
+                {
+                    c.Visible = true;
+                    c.HeaderText = otsikot[i];
+                    c.DisplayIndex = i;
+                    if (naytettavat[i] == "Asiakas_ID") c.Width = 40;
+                }
             }
         }
 
         private void DgvAsiakkaat_SelectionChanged(object sender, EventArgs e)
         {
-            if (dgvAsiakkaat.CurrentRow == null) return;
-
-            if (dgvAsiakkaat.CurrentRow.DataBoundItem is Asiakas a)
+            if (dgvAsiakkaat.CurrentRow?.DataBoundItem is Asiakas a)
             {
                 txtEtunimi.Text = a.Etunimi ?? "";
                 txtSukunimi.Text = a.Sukunimi ?? "";
@@ -117,20 +102,36 @@ namespace VillageNewbies_Projekti.Views
             }
         }
 
-        private void txtHaku_TextChanged(object sender, EventArgs e)
-        {
-            LataaAsiakkaat(txtHaku.Text);
-        }
+        private void txtHaku_TextChanged(object sender, EventArgs e) => LataaAsiakkaat(txtHaku.Text);
 
         private Asiakas? LomakkeestaMokki()
         {
-            if (string.IsNullOrWhiteSpace(txtEtunimi.Text) ||
-                string.IsNullOrWhiteSpace(txtSukunimi.Text) ||
-                string.IsNullOrWhiteSpace(txtPostinro.Text))
+            if (string.IsNullOrWhiteSpace(txtEtunimi.Text))
             {
-                MessageBox.Show("Täytä pakolliset kentät: Etunimi, Sukunimi, Postinumero.",
-                    "Huomio", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return null;
+                MessageBox.Show("Etunimi on pakollinen.", "Huomio", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtEtunimi.Focus(); return null;
+            }
+            if (string.IsNullOrWhiteSpace(txtSukunimi.Text))
+            {
+                MessageBox.Show("Sukunimi on pakollinen.", "Huomio", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtSukunimi.Focus(); return null;
+            }
+            if (string.IsNullOrWhiteSpace(txtPostinro.Text))
+            {
+                MessageBox.Show("Postinumero on pakollinen.", "Huomio", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtPostinro.Focus(); return null;
+            }
+            if (txtPostinro.Text.Length != 5 || !txtPostinro.Text.All(char.IsDigit))
+            {
+                MessageBox.Show("Postinumeron on oltava tasan 5 numeroa.", "Huomio",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtPostinro.Focus(); return null;
+            }
+            if (!string.IsNullOrWhiteSpace(txtEmail.Text) && !txtEmail.Text.Contains('@'))
+            {
+                MessageBox.Show("Sähköpostiosoite ei ole kelvollinen.", "Huomio",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtEmail.Focus(); return null;
             }
 
             return new Asiakas
@@ -148,11 +149,9 @@ namespace VillageNewbies_Projekti.Views
         {
             var a = LomakkeestaMokki();
             if (a == null) return;
-
             try
             {
                 _asiakasService.LisaaAsiakas(a);
-
                 TyhjennaLomake();
                 LataaAsiakkaat();
             }
@@ -171,18 +170,13 @@ namespace VillageNewbies_Projekti.Views
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-
             var a = LomakkeestaMokki();
             if (a == null) return;
-
             a.Asiakas_ID = valittu.Asiakas_ID;
-
             try
             {
                 _asiakasService.PaivitaAsiakas(a);
-
                 LataaAsiakkaat();
-
                 MessageBox.Show("Asiakas päivitetty!", "Onnistui",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -202,40 +196,29 @@ namespace VillageNewbies_Projekti.Views
                 return;
             }
 
-            var vastaus = MessageBox.Show(
-                $"Poistetaanko asiakas \"{valittu.Etunimi} {valittu.Sukunimi}\"?",
-                "Vahvista poisto", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
-            if (vastaus == DialogResult.Yes)
+            if (MessageBox.Show($"Poistetaanko asiakas \"{valittu.KokoNimi}\"?",
+                "Vahvista poisto", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
                 try
                 {
                     _asiakasService.PoistaAsiakas(valittu.Asiakas_ID);
-
                     TyhjennaLomake();
                     LataaAsiakkaat();
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Virhe poistossa:\n{ex.Message}", "Virhe",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"Virhe poistossa:\n{ex.Message}\n\nAsiakkaalla saattaa olla varauksia.",
+                        "Virhe", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
 
-        private void btnTyhjenna_Click(object sender, EventArgs e)
-        {
-            TyhjennaLomake();
-        }
+        private void btnTyhjenna_Click(object sender, EventArgs e) => TyhjennaLomake();
 
         private void TyhjennaLomake()
         {
-            txtEtunimi.Text = "";
-            txtSukunimi.Text = "";
-            txtLahiosoite.Text = "";
-            txtPostinro.Text = "";
-            txtEmail.Text = "";
-            txtPuhelin.Text = "";
+            txtEtunimi.Text = txtSukunimi.Text = txtLahiosoite.Text =
+                txtPostinro.Text = txtEmail.Text = txtPuhelin.Text = "";
             dgvAsiakkaat.ClearSelection();
         }
     }

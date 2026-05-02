@@ -5,9 +5,6 @@ using VillageNewbies_Projekti.Services;
 
 namespace VillageNewbies_Projekti.Forms
 {
-    /// <summary>
-    /// Mökki muokkaus/poisto -dialogi. Täytetään valitun mökin tiedoilla.
-    /// </summary>
     public class MokkiMuokkausForm : Form
     {
         public Mokki Mokki { get; private set; }

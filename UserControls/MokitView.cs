@@ -11,12 +11,11 @@ namespace VillageNewbies_Projekti.Views
 {
     public partial class MokitView : UserControl
     {
-        // ── Palvelut ─────────────────────────────────────────────────────────────
-        private readonly MokkiService _mokkiService = new MokkiService();
-        private readonly VarausService _varausService = new VarausService();
-        private readonly AlueService _alueService = new AlueService();
+        // ── Palvelut ──────────────────────────────────────────────────────────
+        private readonly MokkiService _mokkiService = new();
+        private readonly VarausService _varausService = new();
+        private readonly AlueService _alueService = new();
 
-        // Värit korteille — kierrätetään jos mökkejä on enemmän kuin värejä
         private static readonly Color[] ACCENT_COLORS =
         {
             Color.FromArgb(52,  168, 130),
@@ -27,10 +26,12 @@ namespace VillageNewbies_Projekti.Views
             Color.FromArgb(80,  160, 100),
         };
 
-        // ── Data ─────────────────────────────────────────────────────────────────
-        private List<Mokki> _mokit = new List<Mokki>();
+        // ── Data ──────────────────────────────────────────────────────────────
+        private List<Mokki> _mokit = new();
+        private Dictionary<int, Color> _accentMap = new();
+        private Dictionary<int, bool> _vapaaMap = new();
 
-        // ── Layout constants ─────────────────────────────────────────────────────
+        // ── Layout ────────────────────────────────────────────────────────────
         private const int CARD_W = 320;
         private const int CARD_H = 220;
         private const int CARD_GAP = 20;
@@ -38,7 +39,7 @@ namespace VillageNewbies_Projekti.Views
         private const int HEADER_H = 70;
         private const int FILTER_H = 48;
 
-        // ── Colors & fonts ───────────────────────────────────────────────────────
+        // ── Värit & fontit ────────────────────────────────────────────────────
         private static readonly Color BG = Color.FromArgb(245, 246, 250);
         private static readonly Color SURFACE = Color.White;
         private static readonly Color TEXT_PRI = Color.FromArgb(30, 30, 50);
@@ -46,38 +47,31 @@ namespace VillageNewbies_Projekti.Views
         private static readonly Color AVAIL_OK = Color.FromArgb(34, 197, 94);
         private static readonly Color AVAIL_NO = Color.FromArgb(239, 68, 68);
 
-        private readonly Font _fontTitle = new Font("Segoe UI", 13f, FontStyle.Bold, GraphicsUnit.Point);
-        private readonly Font _fontSub = new Font("Segoe UI", 9f, FontStyle.Regular, GraphicsUnit.Point);
-        private readonly Font _fontSmall = new Font("Segoe UI", 8f, FontStyle.Regular, GraphicsUnit.Point);
-        private readonly Font _fontBadge = new Font("Segoe UI", 8f, FontStyle.Bold, GraphicsUnit.Point);
-        private readonly Font _fontPrice = new Font("Segoe UI", 14f, FontStyle.Bold, GraphicsUnit.Point);
-        private readonly Font _fontHeader = new Font("Segoe UI", 18f, FontStyle.Bold, GraphicsUnit.Point);
+        private readonly Font _fontTitle = new("Segoe UI", 13f, FontStyle.Bold);
+        private readonly Font _fontSub = new("Segoe UI", 9f);
+        private readonly Font _fontSmall = new("Segoe UI", 8f);
+        private readonly Font _fontBadge = new("Segoe UI", 8f, FontStyle.Bold);
+        private readonly Font _fontPrice = new("Segoe UI", 14f, FontStyle.Bold);
+        private readonly Font _fontHeader = new("Segoe UI", 18f, FontStyle.Bold);
 
-        // ── State ────────────────────────────────────────────────────────────────
+        // ── Tila ──────────────────────────────────────────────────────────────
         private bool _showOnlyAvailable = false;
         private int _hoverIndex = -1;
         private Panel _cardPanel = null!;
         private CheckBox _filterCheck = null!;
         private Label _lblCount = null!;
+        private List<(Mokki m, Rectangle r)> _layout = new();
 
-        // Tallennetaan mille mökille mikä väri — pysyy samana haun jälkeenkin
-        private Dictionary<int, Color> _accentMap = new Dictionary<int, Color>();
-        // Tallennetaan onko mökki vapaa tänään
-        private Dictionary<int, bool> _vapaaMap = new Dictionary<int, bool>();
-
-        // ─────────────────────────────────────────────────────────────────────────
+        // ─────────────────────────────────────────────────────────────────────
         public MokitView()
         {
             InitializeComponent();
             BuildUI();
         }
 
-        private void MokitView_Load(object sender, EventArgs e)
-        {
-            LataaMokit();
-        }
+        private void MokitView_Load(object sender, EventArgs e) => LataaMokit();
 
-        // ── Lataa data tietokannasta ──────────────────────────────────────────────
+        // ── Data ──────────────────────────────────────────────────────────────
         private void LataaMokit()
         {
             try
@@ -92,9 +86,7 @@ namespace VillageNewbies_Projekti.Views
                 for (int i = 0; i < _mokit.Count; i++)
                 {
                     var m = _mokit[i];
-                    // Kierrätä värejä
                     _accentMap[m.Mokki_ID] = ACCENT_COLORS[i % ACCENT_COLORS.Length];
-                    // Onko mökki varattu tänään?
                     bool varattu = varaukset.Exists(v =>
                         v.Mokki_ID == m.Mokki_ID &&
                         v.Varattu_Alkupvm <= tanaan &&
@@ -111,11 +103,10 @@ namespace VillageNewbies_Projekti.Views
             }
         }
 
-        // ── Build static chrome ───────────────────────────────────────────────────
+        // ── UI-rakenne ────────────────────────────────────────────────────────
         private void BuildUI()
         {
             this.BackColor = BG;
-            this.AutoScroll = false;
             this.Resize += (s, e) => RenderCards();
 
             // Header
@@ -124,36 +115,35 @@ namespace VillageNewbies_Projekti.Views
                 Dock = DockStyle.Top,
                 Height = HEADER_H,
                 BackColor = Color.FromArgb(30, 30, 50),
-                Padding = new Padding(PANEL_PAD, 0, PANEL_PAD, 0),
+                Padding = new Padding(PANEL_PAD, 0, PANEL_PAD, 0)
             };
-            var lblTitle = new Label
+            header.Controls.Add(new Label
             {
                 Text = "🏡  Mökit – Vuokrakohteet",
                 Font = _fontHeader,
                 ForeColor = Color.White,
                 AutoSize = false,
                 Dock = DockStyle.Fill,
-                TextAlign = ContentAlignment.MiddleLeft,
-            };
-            header.Controls.Add(lblTitle);
+                TextAlign = ContentAlignment.MiddleLeft
+            });
 
-            // Filter bar
+            // Filter-palkki
             var filterBar = new Panel
             {
                 Dock = DockStyle.Top,
                 Height = FILTER_H,
                 BackColor = Color.White,
-                Padding = new Padding(PANEL_PAD, 0, PANEL_PAD, 0),
+                Padding = new Padding(PANEL_PAD, 0, PANEL_PAD, 0)
             };
+
             _filterCheck = new CheckBox
             {
                 Text = "Näytä vain vapaat kohteet",
                 Font = _fontSub,
                 ForeColor = TEXT_PRI,
                 AutoSize = true,
-                Checked = false,
                 Location = new Point(PANEL_PAD, 14),
-                Cursor = Cursors.Hand,
+                Cursor = Cursors.Hand
             };
             _filterCheck.CheckedChanged += (s, e) =>
             {
@@ -161,7 +151,6 @@ namespace VillageNewbies_Projekti.Views
                 RenderCards();
             };
 
-            // Päivitä-nappi
             var btnPaivita = new Button
             {
                 Text = "🔄 Päivitä",
@@ -169,7 +158,7 @@ namespace VillageNewbies_Projekti.Views
                 FlatStyle = FlatStyle.Flat,
                 Cursor = Cursors.Hand,
                 AutoSize = true,
-                Location = new Point(PANEL_PAD + 220, 10),
+                Location = new Point(PANEL_PAD + 220, 10)
             };
             btnPaivita.FlatAppearance.BorderColor = Color.FromArgb(200, 200, 220);
             btnPaivita.Click += (s, e) => LataaMokit();
@@ -181,11 +170,10 @@ namespace VillageNewbies_Projekti.Views
                 FlatStyle = FlatStyle.Flat,
                 Cursor = Cursors.Hand,
                 AutoSize = true,
-                Location = new Point(PANEL_PAD + 330, 10),
+                Location = new Point(PANEL_PAD + 330, 10)
             };
             btnLisaa.FlatAppearance.BorderColor = Color.FromArgb(200, 200, 220);
             btnLisaa.Click += (s, e) => AvaaLisaysDialog();
-            filterBar.Controls.Add(btnLisaa);
 
             _lblCount = new Label
             {
@@ -194,37 +182,36 @@ namespace VillageNewbies_Projekti.Views
                 Height = FILTER_H,
                 TextAlign = ContentAlignment.MiddleRight,
                 Font = _fontSmall,
-                ForeColor = TEXT_SEC,
+                ForeColor = TEXT_SEC
             };
-            filterBar.Controls.Add(_filterCheck);
-            filterBar.Controls.Add(btnPaivita);
-            filterBar.Controls.Add(_lblCount);
             filterBar.Resize += (s, e) =>
             {
                 _lblCount.Location = new Point(filterBar.Width - 220, 0);
                 _lblCount.Width = 200;
             };
 
-            // Scroll-alue
+            filterBar.Controls.AddRange(new Control[] { _filterCheck, btnPaivita, btnLisaa, _lblCount });
+
+            // Korttialue
             _cardPanel = new Panel
             {
                 Dock = DockStyle.Fill,
                 BackColor = BG,
                 AutoScroll = true,
-                Padding = new Padding(PANEL_PAD),
+                Padding = new Padding(PANEL_PAD)
             };
             _cardPanel.MouseMove += CardPanel_MouseMove;
             _cardPanel.MouseLeave += (s, e) => { _hoverIndex = -1; _cardPanel.Invalidate(); };
             _cardPanel.Paint += CardPanel_Paint;
+            _cardPanel.MouseClick += CardPanel_MouseClick;          // ← oikea klikkaus
+            _cardPanel.MouseDoubleClick += CardPanel_MouseDoubleClick; // ← tuplaklikkaus muokkaa
 
             this.Controls.Add(_cardPanel);
             this.Controls.Add(filterBar);
             this.Controls.Add(header);
         }
 
-        // ── Layout & paint ────────────────────────────────────────────────────────
-        private List<(Mokki m, Rectangle r)> _layout = new List<(Mokki, Rectangle)>();
-
+        // ── Korttien piirto ───────────────────────────────────────────────────
         private void RenderCards()
         {
             _layout.Clear();
@@ -257,8 +244,6 @@ namespace VillageNewbies_Projekti.Views
             var g = e.Graphics;
             g.SmoothingMode = SmoothingMode.AntiAlias;
             g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-
-            // Korjattu — alkuperäinen laskukaava oli väärä
             g.TranslateTransform(0, _cardPanel.AutoScrollPosition.Y);
 
             for (int i = 0; i < _layout.Count; i++)
@@ -276,22 +261,18 @@ namespace VillageNewbies_Projekti.Views
             int lift = hovered ? -3 : 0;
             var rc = new Rectangle(r.X, r.Y + lift, r.Width, r.Height);
 
-            // Shadow
             using (var path = RoundedRect(new Rectangle(rc.X + 2, rc.Y + shadow, rc.Width - 2, rc.Height - 2), 12))
             using (var brush = new SolidBrush(Color.FromArgb(hovered ? 40 : 20, 0, 0, 0)))
                 g.FillPath(brush, path);
 
-            // Card background
             using (var path = RoundedRect(rc, 12))
             using (var brush = new SolidBrush(SURFACE))
                 g.FillPath(brush, path);
 
-            // Accent stripe
             using (var stripePath = RoundedRect(new Rectangle(rc.X, rc.Y, 6, rc.Height), 3))
             using (var brush = new SolidBrush(accent))
                 g.FillPath(brush, stripePath);
 
-            // Header band
             int bandH = 62;
             using (var bandPath = RoundedRect(new Rectangle(rc.X, rc.Y, rc.Width, bandH), 12))
             using (var brush = new LinearGradientBrush(
@@ -299,17 +280,14 @@ namespace VillageNewbies_Projekti.Views
                 Color.FromArgb(230, accent), Color.FromArgb(30, accent)))
                 g.FillPath(brush, bandPath);
 
-            // Nimi
             var nameRect = new Rectangle(rc.X + 18, rc.Y + 10, rc.Width - 100, 28);
             using (var b = new SolidBrush(TEXT_PRI))
                 g.DrawString(m.Mokkinimi ?? "–", _fontTitle, b, nameRect);
 
-            // Sijainti (postinro, koska ei erillistä location-kenttää)
             var locRect = new Rectangle(rc.X + 18, rc.Y + 36, rc.Width - 28, 20);
             using (var b = new SolidBrush(TEXT_SEC))
                 g.DrawString($"📍 {m.Postinro}", _fontSmall, b, locRect);
 
-            // Saatavuusbadge
             var badgeColor = vapaa ? AVAIL_OK : AVAIL_NO;
             var badgeText = vapaa ? "Vapaa" : "Varattu";
             var badgeRect = new Rectangle(rc.Right - 82, rc.Y + 12, 70, 22);
@@ -319,21 +297,21 @@ namespace VillageNewbies_Projekti.Views
                 g.DrawString(badgeText, _fontBadge, b, badgeRect,
                     new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
 
-            // Kuvaus
             var descRect = new Rectangle(rc.X + 18, rc.Y + 70, rc.Width - 30, 52);
             using (var b = new SolidBrush(TEXT_SEC))
                 g.DrawString(m.Kuvaus ?? "", _fontSmall, b, descRect,
                     new StringFormat { Trimming = StringTrimming.EllipsisWord });
 
-            // Separator
             using (var pen = new Pen(Color.FromArgb(230, 230, 240)))
                 g.DrawLine(pen, rc.X + 14, rc.Y + 130, rc.Right - 14, rc.Y + 130);
 
-            // Ikonirivi
-            int iconY = rc.Y + 140;
-            DrawIconStat(g, $"👥 {m.Henkilomaara} hlö", rc.X + 18, iconY);
+            using (var b = new SolidBrush(TEXT_SEC))
+                g.DrawString($"👥 {m.Henkilomaara} hlö", _fontSub, b, new Point(rc.X + 18, rc.Y + 140));
 
-            // Hinta
+            // Kynäikoni — vihjaa muokkauksesta
+            using (var b = new SolidBrush(Color.FromArgb(160, TEXT_SEC)))
+                g.DrawString("✎", _fontSub, b, new Point(rc.Right - 28, rc.Y + 140));
+
             var priceStr = $"€{m.Hinta:0}";
             var nightStr = " / yö";
             var priceRect = new Rectangle(rc.X + 18, rc.Y + 168, rc.Width - 30, 28);
@@ -344,21 +322,14 @@ namespace VillageNewbies_Projekti.Views
                 g.DrawString(nightStr, _fontSmall, b,
                     new Rectangle(rc.X + 18 + priceW - 4, rc.Y + 178, 60, 20));
 
-            // Reunus
             using (var pen = new Pen(hovered ? accent : Color.FromArgb(220, 220, 235), hovered ? 2f : 1f))
             using (var path = RoundedRect(rc, 12))
                 g.DrawPath(pen, path);
         }
 
-        private void DrawIconStat(Graphics g, string text, int x, int y)
-        {
-            using (var b = new SolidBrush(TEXT_SEC))
-                g.DrawString(text, _fontSub, b, new Point(x, y));
-        }
-
+        // ── Hiiritapahtumat ───────────────────────────────────────────────────
         private void CardPanel_MouseMove(object? sender, MouseEventArgs e)
         {
-            // Korjattu scroll-offset
             var pt = new Point(e.X, e.Y + (-_cardPanel.AutoScrollPosition.Y));
             int prev = _hoverIndex;
             _hoverIndex = -1;
@@ -368,17 +339,37 @@ namespace VillageNewbies_Projekti.Views
             _cardPanel.Cursor = _hoverIndex >= 0 ? Cursors.Hand : Cursors.Default;
         }
 
-        private static GraphicsPath RoundedRect(Rectangle r, int radius)
+        /// Tuplaklikkaus = muokkaa mökkiä
+        private void CardPanel_MouseDoubleClick(object? sender, MouseEventArgs e)
         {
-            var path = new GraphicsPath();
-            int d = radius * 2;
-            path.AddArc(r.X, r.Y, d, d, 180, 90);
-            path.AddArc(r.Right - d, r.Y, d, d, 270, 90);
-            path.AddArc(r.Right - d, r.Bottom - d, d, d, 0, 90);
-            path.AddArc(r.X, r.Bottom - d, d, d, 90, 90);
-            path.CloseFigure();
-            return path;
+            int idx = HitTest(e);
+            if (idx < 0) return;
+            AvaaMuokkausDialog(_layout[idx].m);
         }
+              /// Oikea klikkaus = kontekstimenu (Muokkaa / Poista)
+        private void CardPanel_MouseClick(object? sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right) return;
+            int idx = HitTest(e);
+            if (idx < 0) return;
+
+            var mokki = _layout[idx].m;
+            var menu = new ContextMenuStrip();
+            menu.Items.Add("✎  Muokkaa mökkiä", null, (s, _) => AvaaMuokkausDialog(mokki));
+            menu.Items.Add(new ToolStripSeparator());
+            menu.Items.Add("🗑  Poista mökki", null, (s, _) => PoistaMokki(mokki));
+            menu.Show(_cardPanel, e.Location);
+        }
+
+        private int HitTest(MouseEventArgs e)
+        {
+            var pt = new Point(e.X, e.Y + (-_cardPanel.AutoScrollPosition.Y));
+            for (int i = 0; i < _layout.Count; i++)
+                if (_layout[i].r.Contains(pt)) return i;
+            return -1;
+        }
+
+        // ── Dialogi-toiminnot ─────────────────────────────────────────────────
         private void AvaaLisaysDialog()
         {
             var dlg = new MokkiLomakeForm(_alueService);
@@ -395,6 +386,63 @@ namespace VillageNewbies_Projekti.Views
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+
+        private void AvaaMuokkausDialog(Mokki mokki)
+        {
+            var dlg = new MokkiMuokkausForm(mokki, _alueService);
+            if (dlg.ShowDialog() != DialogResult.OK) return;
+
+            try
+            {
+                if (dlg.Poistettu)
+                {
+                    PoistaMokki(mokki);
+                }
+                else
+                {
+                    _mokkiService.PaivitaMokki(dlg.Mokki);
+                    LataaMokit();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Virhe tallennuksessa:\n{ex.Message}", "Virhe",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void PoistaMokki(Mokki mokki)
+        {
+            var vastaus = MessageBox.Show(
+                $"Poistetaanko mökki \"{mokki.Mokkinimi}\"?\nTämä poistaa myös mökin varaukset!",
+                "Vahvista poisto", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+            if (vastaus != DialogResult.Yes) return;
+
+            try
+            {
+                _mokkiService.PoistaMokki(mokki.Mokki_ID);
+                LataaMokit();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Virhe poistossa:\n{ex.Message}", "Virhe",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // ── Apumetodit ────────────────────────────────────────────────────────
+        private static GraphicsPath RoundedRect(Rectangle r, int radius)
+        {
+            var path = new GraphicsPath();
+            int d = radius * 2;
+            path.AddArc(r.X, r.Y, d, d, 180, 90);
+            path.AddArc(r.Right - d, r.Y, d, d, 270, 90);
+            path.AddArc(r.Right - d, r.Bottom - d, d, d, 0, 90);
+            path.AddArc(r.X, r.Bottom - d, d, d, 90, 90);
+            path.CloseFigure();
+            return path;
         }
     }
 }
